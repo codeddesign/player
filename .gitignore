@@ -2,3 +2,4 @@
 node_modules/
 config.js
 rollup.dev.js
+dist/player.js
