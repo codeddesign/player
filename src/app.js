@@ -10,6 +10,6 @@ assets().add(() => {
             throw new Error(`Campaign ${source.id} does not exist.`);
         }
 
-        window.player = new Player(data);
+        new Player(data);
     });
 });

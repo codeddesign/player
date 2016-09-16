@@ -76,8 +76,8 @@ class Player {
             // first: prioritize tags based on given rules.
             this._tags = prioritizeTags(this._tags);
 
-            // then: set first one as main
-            this.setMainTag();
+            // then: initialize first tag
+            this.loadNextTag();
 
             if (this.campaign.isStandard()) {
                 this.$els.playmain.show();
@@ -106,16 +106,6 @@ class Player {
         }
 
         return this.campaign.size();
-    }
-
-    setMainTag(index = 0) {
-        if (this._tags.length) {
-            this.mainTag = this._tags[index];
-
-            this.mainTag.ima.initialize();
-        }
-
-        return this;
     }
 
     loadNextTag(byUser = false) {
