@@ -8,4 +8,4 @@ export default {
         beachfront: 3,
         tremor: 4
     },
-}
+};
