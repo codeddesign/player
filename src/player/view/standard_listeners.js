@@ -32,6 +32,8 @@ export default (player) => {
         player.$els.play.removeClass('icon-pause');
     }
 
+    let expectsToPlay = false;
+
     /**
      * User - events
      */
@@ -43,6 +45,8 @@ export default (player) => {
         if (!player.tagsReady()) {
             return false;
         }
+
+        expectsToPlay = true;
 
         el.hide();
 
@@ -202,5 +206,22 @@ export default (player) => {
         player.$els.container.pub('hovering:show');
 
         setButtonToPlay()
+    })
+
+    /**
+     * Other events.
+     */
+    player.$el.sub('aerror', () => {
+        if (!player.noTagsLeft()) {
+            player.$els.container.addClass('aderror');
+
+            player.$els.loading.hide();
+
+            player.$els.youtube.show();
+        }
+
+        if (expectsToPlay) {
+            player.play();
+        }
     })
 }

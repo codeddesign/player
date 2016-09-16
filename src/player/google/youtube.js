@@ -34,6 +34,10 @@ class Youtube {
                         return self._status == 2;
                     }
 
+                    self._yt.wasPlayed = () => {
+                        return self._yt.isPlaying() || self._yt.isPaused();
+                    }
+
                     self._yt.play = () => {
                         if (player.campaign.isStandard()) {
                             self._yt.playVideo();

@@ -38,7 +38,7 @@ class Player {
     }
 
     play() {
-        if (this.mainTag.ima.loaded) {
+        if (this.mainTag.ima.loaded && !this.mainTag.ima.error) {
             this.mainTag.ima.play();
 
             return this;
@@ -109,7 +109,7 @@ class Player {
     }
 
     loadNextTag(byUser = false) {
-        // not in view also.
+        // @note: not in view?
         if (this.mainTag && this.mainTag.ima.initialized && this.mainTag.ima.loaded && !this.mainTag.ima.error) {
             return false;
         }
@@ -125,7 +125,7 @@ class Player {
             }
 
             // interrupt initialization if youtube is playing
-            if (this._youtube && this._youtube.isPlaying()) {
+            if (this._youtube && this._youtubeReady && this._youtube.wasPlayed()) {
                 return true;
             }
 
@@ -140,6 +140,10 @@ class Player {
         remove.forEach((tagIndex) => {
             this._tags.splice(tagIndex, 1);
         });
+    }
+
+    noTagsLeft() {
+        return !this._tags.length
     }
 
     /**
