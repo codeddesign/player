@@ -190,6 +190,7 @@ export default (player) => {
 
         player.$els.logo.hide();
         player.$els.overlay.hide();
+        player.$els.loading.hide();
 
         player.$els.youtube.show();
 

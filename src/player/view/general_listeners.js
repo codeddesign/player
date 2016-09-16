@@ -82,10 +82,14 @@ export default (player) => {
     })
 
     player.$el.sub('completed', () => {
+        player.$els.loading.hide();
+
         player.youtubePlay();
     })
 
     player.$el.sub('aerror', () => {
+        player.$els.loading.hide();
+
         if (!device.isMobile()) {
             player.loadNextTag();
         }
