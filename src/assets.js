@@ -21,13 +21,7 @@ class Assets {
             events: {
                 oncomplete() {
                     // Even though it's loaded it takes few mls for google variable to be available
-                    let interval = setInterval(() => {
-                        if (self._googleIsReady()) {
-                            clearInterval(interval);
-
-                            self.imaReady();
-                        }
-                    }, 1);
+                    self._waitForGoogle();
                 }
             }
         }, {
@@ -57,6 +51,16 @@ class Assets {
         return typeof google !== 'undefined';
     }
 
+    _waitForGoogle() {
+        let interval = setInterval(() => {
+            if (this._googleIsReady()) {
+                clearInterval(interval);
+
+                this.imaReady();
+            }
+        }, 1);
+    }
+
     __addOne() {
         const asset = this.asset,
             attr = (asset.attributes['href']) ? 'href' : 'src',
@@ -70,11 +74,7 @@ class Assets {
         }
 
         if (asset.name == 'ima') {
-            if (!this._googleIsReady()) {
-                throw new Error('Google is already added but it it\'s not loaded');
-            }
-
-            this.imaReady();
+            this._waitForGoogle();
 
             return this;
         }
