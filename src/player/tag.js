@@ -39,12 +39,21 @@ class Tag {
             '[referrer_root]': encodeURIComponent(referrer.link.base),
             '[referrer_url]': encodeURIComponent(referrer.link.complete),
             '[user_agent]': device.agent,
-            '[ip_address]': ''
+            '[ip_address]': this._player.campaign.data.ip
         };
 
         Object.keys(mapped).forEach((key) => {
-            this.link = this.link.replace(key, mapped[key]);
+            this._replaceKey(key, mapped[key]);
         });
+
+        return this;
+    }
+
+    _replaceKey(key, value) {
+        key = key.replace('\[', '\\[')
+            .replace('\]', '\\]');
+
+        this.link = this.link.replace(new RegExp(key, 'g'), value);
 
         return this;
     }
