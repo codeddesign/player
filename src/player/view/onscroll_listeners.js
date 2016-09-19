@@ -85,4 +85,10 @@ export default (player) => {
 
         player.$els.aclose.hide();
     })
-}
+
+    player.$el.sub('aerror', () => {
+        if (player.mainTag.loaded) {
+            player.$el.pub('completed');
+        }
+    })
+};

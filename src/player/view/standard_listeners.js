@@ -216,8 +216,6 @@ export default (player) => {
         if (!player.noTagsLeft()) {
             player.$els.container.addClass('aderror');
 
-            player.$els.loading.hide();
-
             player.$els.youtube.show();
         }
 
@@ -225,4 +223,4 @@ export default (player) => {
             player.play();
         }
     })
-}
+};
