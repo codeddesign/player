@@ -1,5 +1,6 @@
 import device from '../../utils/device';
 import Animator from '../../utils/animator';
+import config from '../../../config';
 
 class Ima {
     constructor(tag) {
@@ -58,8 +59,8 @@ class Ima {
     _makeRequest() {
         this.loader = new google.ima.AdsLoader(this.display);
 
-        this.loader.getSettings().setVpaidMode(google.ima.ImaSdkSettings.VpaidMode.ENABLED);
-        this.loader.getSettings().setNumRedirects(10);
+        this.loader.getSettings().setVpaidMode(config.ima.vpaid_mode);
+        this.loader.getSettings().setNumRedirects(config.ima.max_redirects);
 
         this.loader.addEventListener(
             google.ima.AdsManagerLoadedEvent.Type.ADS_MANAGER_LOADED,
@@ -94,7 +95,7 @@ class Ima {
         // manager settings
         const settings = new google.ima.AdsRenderingSettings();
         settings.restoreCustomPlaybackStateOnAdBreakComplete = true;
-        settings.loadVideoTimeout = 3 * 1000;
+        settings.loadVideoTimeout = config.ima.timeout * 1000;
         settings.enablePreloading = true;
 
         // initiate manager
