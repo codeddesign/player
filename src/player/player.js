@@ -184,17 +184,15 @@ class Player {
             }
         }
 
-        if (this.campaign.isStandard() || 1 == 1) {
-            this.$el.show();
-            this.$els.container.show();
-        }
-
         if (this.campaign.isOnscroll()) {
             this.$els.logo.hide();
             this.$els.overlay.hide();
 
             this.$els.container.addClass('onscroll');
         }
+
+        this.$el.show();
+        this.$els.container.show();
 
         return this;
     }
