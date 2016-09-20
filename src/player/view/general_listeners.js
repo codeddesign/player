@@ -11,7 +11,7 @@ export default (player) => {
         }
 
         if (!player.mainTag.ima.started && player.$el.onScreen().mustPlay) {
-            player.$els.container.removeClass('onscroll');
+            player.$els.container.slideDown();
 
             return false;
         }
@@ -90,7 +90,7 @@ export default (player) => {
     player.$el.sub('aerror', () => {
         player.$els.loading.hide();
 
-        if (!device.isMobile()) {
+        if (!player.hasInfinity() && !device.isMobile()) {
             player.loadNextTag();
         }
     })

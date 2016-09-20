@@ -7,6 +7,11 @@ import device from '../utils/device';
 class Campaign {
     constructor(data) {
         this.data = data;
+
+        this.default_size = {
+            width: 640,
+            height: 360
+        };
     }
 
     isStandard() {
@@ -17,18 +22,26 @@ class Campaign {
         return this.data.info.type == 'onscrolldisplay';
     }
 
+    isSidebarInfinity() {
+        return this.data.info.type == 'sidebarinfinity';
+    }
+
     tags() {
         let tags;
 
         switch (this.data.info.type) {
             case 'standard':
                 tags = this.data.tags.general;
+
                 break;
             case 'onscrolldisplay':
+            case 'sidebarinfinity':
                 tags = this.data.tags.stream;
+
                 break;
             default:
-                console.warn('Unhandled campaign type', this.data.info.type);
+                throw Error(`Unhandled campaign type: ${this.data.info.type}`);
+
                 break;
         }
 
@@ -37,10 +50,7 @@ class Campaign {
 
     size() {
         if (this.isOnscroll()) {
-            return {
-                width: 640,
-                height: 360
-            }
+            return this.default_size;
         }
 
         return this._parseSize();

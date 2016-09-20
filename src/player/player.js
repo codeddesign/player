@@ -5,8 +5,10 @@ import createTemplate from './view/create_template';
 import addGeneralListeners from './view/general_listeners';
 import addStandardListeners from './view/standard_listeners';
 import addOnscrollListeners from './view/onscroll_listeners';
+import addSidebarInifinityListeners from './view/sidebarinfinity_listeners';
 import prioritizeTags from '../utils/prioritize_tags';
 import device from '../utils/device';
+import sizeFromWidth from '../utils/size_from_width';
 
 /**
  * Setup and initialization.
@@ -29,6 +31,10 @@ class Player {
 
         this._youtube = false;
         this._youtubeReady = false;
+
+        this._disabled = false;
+
+        // todo: disable infinity on desktop
 
         this.__setTemplateElements()
             .__setTemplateListeners()
@@ -95,10 +101,11 @@ class Player {
 
     size() {
         if (this.campaign.isStandard()) {
-            return {
-                width: this.$el.node.offsetWidth,
-                height: this.$el.node.offsetHeight
-            }
+            return this.$el.size();
+        }
+
+        if (this.campaign.isSidebarInfinity()) {
+            return sizeFromWidth(300);
         }
 
         if (!this.campaign.size()) {
@@ -108,9 +115,9 @@ class Player {
         return this.campaign.size();
     }
 
-    loadNextTag(byUser = false) {
+    loadNextTag(byUser = false, forced = false) {
         // @note: not in view?
-        if (this.mainTag && this.mainTag.ima.initialized && this.mainTag.ima.loaded && !this.mainTag.ima.error) {
+        if (!forced && this.mainTag && this.mainTag.ima.initialized && this.mainTag.ima.loaded && !this.mainTag.ima.error) {
             return false;
         }
 
@@ -118,7 +125,7 @@ class Player {
         const remove = [];
 
         this._tags.some((tag, index) => {
-            if (tag.ima.error) {
+            if (tag.ima.error || tag.ima.started) {
                 remove.push(index);
 
                 return false;
@@ -140,10 +147,30 @@ class Player {
         remove.forEach((tagIndex) => {
             this._tags.splice(tagIndex, 1);
         });
+
+        this.resetTags();
     }
 
     noTagsLeft() {
-        return !this._tags.length
+        return !this._tags.length;
+    }
+
+    hasInfinity() {
+        return this.campaign.isSidebarInfinity();
+    }
+
+    resetTags() {
+        if (this.hasInfinity() && this.noTagsLeft() && !this._disabled) {
+            this._tagsRequested = 0;
+
+            this.__setTags();
+        }
+    }
+
+    disable() {
+        this._disabled = true;
+
+        return this;
     }
 
     /**
@@ -168,14 +195,21 @@ class Player {
             addStandardListeners(this);
         }
 
-        if (this.campaign.isOnscroll()) {
+        if (this.campaign.isOnscroll() || this.campaign.isSidebarInfinity()) {
             addOnscrollListeners(this);
+        }
+
+        if (this.campaign.isSidebarInfinity()) {
+            addSidebarInifinityListeners(this);
         }
 
         return this;
     }
 
     __setView(campaign) {
+        this.$el.show();
+        this.$els.container.show();
+
         if (device.isMobile()) {
             this.$els.container.addClass('mobile');
 
@@ -184,20 +218,39 @@ class Player {
             }
         }
 
-        if (this.campaign.isOnscroll()) {
-            this.$els.logo.hide();
-            this.$els.overlay.hide();
-
-            this.$els.container.addClass('onscroll');
+        if (this.campaign.isStandard()) {
+            this.$els.logo.show();
+            this.$els.overlay.show();
         }
 
-        this.$el.show();
-        this.$els.container.show();
+        if (this.__isSliding()) {
+            this.$els.container.slideUp();
+        }
+
+        if (this.__isFading()) {
+            this.$els.container.asFaded();
+        }
+
+        if (this.campaign.isSidebarInfinity()) {
+            this.$el.addClass('sidebar');
+
+            this.$el.setSizes({ width: 300, height: 250 });
+
+            this.$el.style('marginLeft', (this.$el.offsetLeft() - this.$el.parent().offsetLeft()) + 'px');
+
+            this.$els.filler.show().asFaded().fadeIn();
+        }
 
         return this;
     }
 
     __setTags() {
+        this.mainTag = false;
+
+        if (this.campaign.isSidebarInfinity() && device.isMobile()) {
+            return this;
+        }
+
         this.campaign.tags().forEach((link, index) => {
             const tag = new Tag(link, this);
 
@@ -223,6 +276,14 @@ class Player {
         }
 
         return this;
+    }
+
+    __isSliding() {
+        return this.campaign.isOnscroll();;
+    }
+
+    __isFading() {
+        return this.campaign.isSidebarInfinity();
     }
 }
 

@@ -213,12 +213,18 @@ export default (player) => {
      * Other events.
      */
     player.$el.sub('aerror', () => {
-        if (!player.noTagsLeft()) {
+        if (player.noTagsLeft()) {
             player.$els.container.addClass('aderror');
 
             player.$els.youtube.show();
         }
 
+        if (expectsToPlay) {
+            player.play();
+        }
+    })
+
+    player.$el.sub('canplay', () => {
         if (expectsToPlay) {
             player.play();
         }

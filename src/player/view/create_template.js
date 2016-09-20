@@ -11,10 +11,12 @@ import $ from '../../utils/element';
  */
 export default (campaign) => {
     const unique = `a${random()}`;
-    const html = `<div style="max-width:640px;max-height: 379px;position:relative;margin: 0px auto;" class="hidden" id="${unique}">
-        <div class="player__aclose hidden">CLOSE <img src="${source.path}css/images/closeicon.png"></div>
+    const html = `<div class="player__main hidden" id="${unique}">
+        <div class="player__filler hidden">
+            <img src="${source.path}/css/images/filler.jpg">
+        </div>
         <div class="player__container hidden">
-            <div class="player__overlay" ${campaign.isStandard() ? `style="background-image: url(http://img.youtube.com/vi/${campaign.videos().url}/hqdefault.jpg);"` : ''}>
+            <div class="player__overlay hidden" ${campaign.isStandard() ? `style="background-image: url(http://img.youtube.com/vi/${campaign.videos().url}/hqdefault.jpg);"` : ''}>
                 <span class="player__playmain icon-play hidden"></span>
             </div>
             <div class="player__loading hidden">
@@ -43,7 +45,7 @@ export default (campaign) => {
                     <span class="player__full icon-fullscreen-hold"></span>
                 </div>
             </div>
-            <a href="http://a3m.io" target="_blank" class="player__logo hovering"></a>
+            <a href="http://a3m.io" target="_blank" class="player__logo hovering hidden"></a>
             <div class="player__share hovering hidden">
                 <span class="icon-vidshareurl"></span>
                 <span class="icon-vidfacebook"></span>
@@ -54,6 +56,7 @@ export default (campaign) => {
                 <span>Add this code to your website</span>
                 <textarea rows="2">${source.script.htmlSelf()}</textarea>
             </div>
+            <span class="player__aclose hidden">&times;</span>
             <span class="player__asound icon-mute hidden"></span>
         </div>
     </div>`;

@@ -62,7 +62,7 @@ export default (player) => {
     player.$el.sub('canplay', () => {
         if (!player.mainTag.ima.started && player.$el.onScreen().mustPlay) {
             // it will trigger 'transitionend'
-            player.$els.container.removeClass('onscroll');
+            player.$els.container.slideDown();
 
             return false;
         }
@@ -73,7 +73,9 @@ export default (player) => {
     })
 
     player.$el.sub('started', () => {
-        player.$els.aclose.show();
+        if (!player.mainTag.ima.isSkippable()) {
+            player.$els.aclose.show();
+        }
 
         if (device.isMobile()) {
             player.$els.asound.show();
@@ -81,7 +83,7 @@ export default (player) => {
     })
 
     player.$el.sub('completed', () => {
-        player.$els.container.addClass('onscroll');
+        player.$els.container.slideUp();
 
         player.$els.aclose.hide();
     })

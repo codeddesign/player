@@ -18,7 +18,7 @@ class Ima {
 
         this.initialized = false;
         this.loaded = false;
-        this.played = false;
+        this.started = false;
         this.completed = false;
 
         this.animator = false;
@@ -27,6 +27,44 @@ class Ima {
             ._setDisplay()
             ._setRequest()
             ._makeRequest();
+    }
+
+    initialize(byUser = false) {
+        this._player.$els.loading.show();
+        this._$el.show();
+
+        if (!this.initialized && (!device.isMobile() || byUser)) {
+            this.initialized = true;
+
+            this.display.initialize();
+            this.manager.init(this._player.size().width, this._player.size().height, google.ima.ViewMode.NORMAL);
+
+            if (this.__startsMuted()) {
+                this.manager.setVolume(0);
+            }
+        }
+
+        return this;
+    }
+
+    isSkippable() {
+        return this.manager.getCurrentAd().isSkippable();
+    }
+
+    play() {
+        this.initialize(true);
+
+        if (!this.started) {
+            this.manager.start();
+
+            return this;
+        }
+
+        if (!this.completed) {
+            this.manager.resume();
+        }
+
+        return this;
     }
 
     _setSelector() {
@@ -127,40 +165,6 @@ class Ima {
         });
     }
 
-    initialize(byUser = false) {
-        this._player.$els.loading.show();
-        this._$el.show();
-
-        if (!this.initialized && (!device.isMobile() || byUser)) {
-            this.initialized = true;
-
-            this.display.initialize();
-            this.manager.init(this._player.size().width, this._player.size().height, google.ima.ViewMode.NORMAL);
-
-            if (this._player.campaign.isOnscroll()) {
-                this.manager.setVolume(0);
-            }
-        }
-
-        return this;
-    }
-
-    play() {
-        this.initialize(true);
-
-        if (!this.started) {
-            this.manager.start();
-
-            return this;
-        }
-
-        if (!this.completed) {
-            this.manager.resume();
-        }
-
-        return this;
-    }
-
     _aError(ev) {
         console.error(this.error = ev.getError());
 
@@ -198,6 +202,10 @@ class Ima {
                 this._player.$el.pub('canplay');
 
                 break;
+            case google.ima.AdEvent.Type.SKIPPED:
+                this._player.$el.pub('skipped');
+
+                break;
             case google.ima.AdEvent.Type.ALL_ADS_COMPLETED:
                 this.completed = true;
 
@@ -215,6 +223,11 @@ class Ima {
 
                 break;
         }
+    }
+
+    __startsMuted() {
+        return this._player.campaign.isOnscroll() ||
+            this._player.campaign.isSidebarInfinity();
     }
 }
 

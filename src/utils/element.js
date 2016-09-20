@@ -4,7 +4,15 @@
 let create = (tag, properties = {}, events = {}) => {
     let virtual = document.createElement(tag);
 
-    Object.keys(properties).forEach((key) => virtual[key] = properties[key]);
+    Object.keys(properties).forEach((key) => {
+        if (key.indexOf('dataset') !== -1) {
+            virtual.dataset[key.split('_')[1]] = properties[key];
+
+            return false;
+        }
+
+        virtual[key] = properties[key];
+    });
 
     Object.keys(events).forEach((key) => {
         virtual[key] = events[key].apply(virtual);
@@ -175,7 +183,7 @@ class Element {
     }
 
     addBefore(tag, properties = {}) {
-        let virtual = create(tag, properties, events);
+        let virtual = create(tag, properties);
 
         this.parent().node.insertBefore(virtual, this.node.nextSibling);
 
@@ -188,8 +196,33 @@ class Element {
         return this;
     }
 
+    bounds() {
+        return this.node.getBoundingClientRect();
+    }
+
+    offsetLeft() {
+        return this.node.offsetLeft;
+    }
+
+    offsetRight() {
+        return this.node.offsetRight;
+    }
+
+    size() {
+        return {
+            width: this.node.offsetWidth,
+            height: this.node.offsetHeight
+        };
+    }
+
+    setSizes(size = {}) {
+        Object.keys(size).forEach((key) => {
+            this.style(key, `${size[key]}px`);
+        });
+    }
+
     onScreen() {
-        const bounds = this.node.getBoundingClientRect(),
+        const bounds = this.bounds(),
             halfHight = (bounds.height || 360) / 2,
             topAbs = Math.abs(bounds.top),
             diffAbs = window.innerHeight - topAbs,
@@ -200,8 +233,7 @@ class Element {
 
         return {
             mustPlay,
-            mustPause,
-            bounds
+            mustPause
         };
     }
 
@@ -215,6 +247,37 @@ class Element {
         const event = new CustomEvent(evName, { detail: data });
 
         this.node.dispatchEvent(event);
+    }
+
+    slideUp() {
+        this.addClass('slide');
+
+        return this;
+    }
+
+    slideDown() {
+        this.removeClass('slide');
+
+        return this;
+    }
+
+    asFaded() {
+        this.addClass('fade');
+        this.addClass('faded');
+
+        return this;
+    }
+
+    fadeOut() {
+        this.addClass('faded');
+
+        return this;
+    }
+
+    fadeIn() {
+        this.removeClass('faded');
+
+        return this;
     }
 }
 
