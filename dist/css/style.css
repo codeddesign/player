@@ -21,17 +21,8 @@
     overflow: hidden;
     width: 100%;
     padding-top: 0;
-    -moz-transition: padding-bottom 1.1s ease-in-out;
-    -ms-transition: padding-bottom 1.1s ease-in-out;
-    -o-transition: padding-bottom 1.1s ease-in-out;
-    -webkit-transition: padding-bottom 1.1s ease-in-out;
-    transition: padding-bottom 1.1s;
     clear: both;
     background: black;
-}
-
-.player__container.slide {
-    padding-bottom: 0;
 }
 
 .player__overlay {
@@ -574,6 +565,13 @@ iframe.player__youtube.hidden {
     transform: translateY(-50%);*/
 }
 
+.player__main.sidebar .player__container {
+    padding-bottom: 0;
+}
+
+.player__main.sidebar .player__loading {
+    margin: 62px auto;
+}
 
 /* Player filler */
 
@@ -596,6 +594,19 @@ iframe.player__youtube.hidden {
 
 /* Transitions */
 
+.slide {
+    padding-bottom: 56.25%;
+    transition: padding-bottom 1.1s;
+    -moz-transition: padding-bottom 1.1s ease-in-out;
+    -ms-transition: padding-bottom 1.1s ease-in-out;
+    -o-transition: padding-bottom 1.1s ease-in-out;
+    -webkit-transition: padding-bottom 1.1s ease-in-out;
+}
+
+.slide.slided {
+    padding-bottom: 0;
+}
+
 .fade {
     opacity: 1;
     transition: opacity .8s;
@@ -605,6 +616,6 @@ iframe.player__youtube.hidden {
     -webkit-transition: opacity .8s ease-in-out;
 }
 
-.faded {
+.fade.faded {
     opacity: 0;
 }

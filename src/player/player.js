@@ -117,7 +117,7 @@ class Player {
 
     loadNextTag(byUser = false, forced = false) {
         // @note: not in view?
-        if (!forced && this.mainTag && this.mainTag.ima.initialized && this.mainTag.ima.loaded && !this.mainTag.ima.error) {
+        if (!forced && this.mainTag && !this.mainTag.completed && this.mainTag.ima.initialized && this.mainTag.ima.loaded && !this.mainTag.ima.error) {
             return false;
         }
 
@@ -125,7 +125,7 @@ class Player {
         const remove = [];
 
         this._tags.some((tag, index) => {
-            if (tag.ima.error || tag.ima.started) {
+            if (tag.ima.error || tag.ima.started || tag.ima.completed) {
                 remove.push(index);
 
                 return false;
@@ -224,7 +224,7 @@ class Player {
         }
 
         if (this.__isSliding()) {
-            this.$els.container.slideUp();
+            this.$els.container.asSlided();
         }
 
         if (this.__isFading()) {
@@ -234,11 +234,20 @@ class Player {
         if (this.campaign.isSidebarInfinity()) {
             this.$el.addClass('sidebar');
 
+            // set fix sizes for main element and player container
             this.$el.setSizes({ width: 300, height: 250 });
+            this.$els.container.setSizes(sizeFromWidth(300));
 
+            // specific margin left for fixed
             this.$el.style('marginLeft', (this.$el.offsetLeft() - this.$el.parent().offsetLeft()) + 'px');
 
+            // show filler
             this.$els.filler.show().asFaded().fadeIn();
+
+            // add fixed if not in view and scrolled
+            if (this.$el.parent().bounds().top <= 0) {
+                this.$el.addClass('fixed');
+            }
         }
 
         return this;

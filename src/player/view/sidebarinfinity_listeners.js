@@ -5,8 +5,7 @@ export default (player) => {
      * Current ad state.
      */
 
-    let completed = false,
-        hadError = false;
+    let completed = false;
 
     /**
      * Events by user
@@ -20,6 +19,10 @@ export default (player) => {
         }
 
         player.$el.removeClass('fixed');
+
+        if (player.$el.onScreen().mustPlay && player.mainTag && player.mainTag.ima.loaded && !player.mainTag.ima.started) {
+            player.$els.filler.fadeOut();
+        }
 
         return false;
     })
@@ -51,17 +54,16 @@ export default (player) => {
             return false;
         }
 
-        // fake scroll
-        if (!player.$el.onScreen().mustPlay) {
-            $().pub('scroll');
+        // triggers play
+        if (player.$el.onScreen().mustPlay) {
+            player.$els.container.fadeIn();
         }
-
-        // trigger the play
-        player.$els.container.fadeIn();
     })
 
     player.$el.sub('loaded', () => {
-        player.$els.filler.fadeOut();
+        if (player.$el.onScreen().mustPlay) {
+            player.$els.filler.fadeOut();
+        }
     })
 
     player.$els.container.sub('transitionend', () => {
@@ -74,11 +76,8 @@ export default (player) => {
         completed = true;
         player.$els.container.fadeOut();
 
-        hadError = true;
         if (!ev.detail.error) {
-            hadError = false;
-
-            player.mainTag.ima._$el.remove();
+            player.mainTag.ima.destroy();
         }
     })
 

@@ -165,10 +165,19 @@ class Ima {
         });
     }
 
-    _aError(ev) {
-        console.error(this.error = ev.getError());
+    destroy() {
+        this.manager.destroy();
 
         this._$el.remove();
+
+        return this;
+    }
+
+    _aError(ev) {
+        console.error(this.error = ev.getError());
+        console.info(this._tag.link);
+
+        this.destroy();
 
         this._player.$el.pub('aerror');
     }

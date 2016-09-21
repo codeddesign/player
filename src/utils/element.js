@@ -249,14 +249,23 @@ class Element {
         this.node.dispatchEvent(event);
     }
 
-    slideUp() {
+    asSlided() {
         this.addClass('slide');
+        this.addClass('slided');
+    }
+
+    slideUp() {
+        if (this.hasClass('slide')) {
+            this.addClass('slided');
+        }
 
         return this;
     }
 
     slideDown() {
-        this.removeClass('slide');
+        if (this.hasClass('slide')) {
+            this.removeClass('slided');
+        }
 
         return this;
     }
@@ -269,13 +278,17 @@ class Element {
     }
 
     fadeOut() {
-        this.addClass('faded');
+        if (this.hasClass('fade')) {
+            this.addClass('faded');
+        }
 
         return this;
     }
 
     fadeIn() {
-        this.removeClass('faded');
+        if (this.hasClass('fade')) {
+            this.removeClass('faded');
+        }
 
         return this;
     }
