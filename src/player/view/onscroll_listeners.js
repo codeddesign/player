@@ -44,6 +44,10 @@ export default (player) => {
             return false;
         }
 
+        if (!player.mainTag || !player.mainTag.ima) {
+            return false;
+        }
+
         player.mainTag.ima.manager.setVolume(ev.detail.volume);
     })
 

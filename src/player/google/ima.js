@@ -115,7 +115,7 @@ class Ima {
         this.loader.addEventListener(
             google.ima.AdErrorEvent.Type.AD_ERROR,
             (ev) => {
-                console.error('Manager', this.error = ev.getError());
+                console.warn('Manager', this.error = ev.getError());
 
                 this._player.onManagerLoad();
 
@@ -174,7 +174,7 @@ class Ima {
     }
 
     _aError(ev) {
-        console.error(this.error = ev.getError());
+        console.warn(this.error = ev.getError());
         console.info(this._tag.link);
 
         this.destroy();

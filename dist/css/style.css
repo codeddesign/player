@@ -384,21 +384,8 @@ iframe.player__youtube.hidden {
     cursor: pointer;
     position: absolute;
     display: inline-block;
-    min-width: 20px;
-    min-height: 20px;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    border-radius: 50%;
-    font-size: 14px;
-    font-weight: 700;
-    font-family: sans-serif !important;
-    line-height: 1.3;
-    color: #6c689e;
     top: 20px;
     right: 20px;
-    border: 2px #6c689e solid;
-    font-weight: bold;
 }
 
 
@@ -544,7 +531,7 @@ iframe.player__youtube.hidden {
     background: transparent;
     min-width: 300px;
     max-width: 300px;
-    min-height: 250px;
+    min-height: 169px;
     max-height: 250px;
 }
 
@@ -585,12 +572,69 @@ iframe.player__youtube.hidden {
     background: transparent;
 }
 
+/*
 .player__filler > img {
     position: relative;
     max-width: 100%;
     max-height: 100%;
 }
+*/
 
+/* Infinity FB Backfill */
+
+.player__fbsharebg {
+	display: inline-block;
+	width: 300px;
+	height: 149px;
+	background: url('images/player__fbshare.png');
+	position: relative;
+	z-index: 9999;
+}
+
+.player__infinityfbwrap {
+	position: absolute;
+	margin-top: 97px;
+	margin-left: 23px;
+}
+
+.player__fblikebutton {
+	background: #E6EFF6; /* for non-css3 browsers */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F3F9FC', endColorstr='#E6EFF6'); /* for IE */
+	background: -webkit-gradient(linear, left top, left bottom, from(#F3F9FC), to(#E6EFF6)); /* for webkit browsers */
+	background: -moz-linear-gradient(top,  #F3F9FC,  #E6EFF6); /* for firefox 3.6+ */
+	height: 27px;
+	padding: 0 5px;
+	-moz-box-shadow: 0 1px 1px #777;
+	-webkit-box-shadow: 0 1px 1px #777;
+	box-shadow: 0 1px 1px #777;
+	display: inline-block;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+
+.player__fbsharebutton {
+	background: #E6EFF6; /* for non-css3 browsers */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F3F9FC', endColorstr='#E6EFF6'); /* for IE */
+	background: -webkit-gradient(linear, left top, left bottom, from(#F3F9FC), to(#E6EFF6)); /* for webkit browsers */
+	background: -moz-linear-gradient(top,  #F3F9FC,  #E6EFF6); /* for firefox 3.6+ */
+	height: 27px;
+	padding: 0 5px;
+	-moz-box-shadow: 0 1px 1px #777;
+	-webkit-box-shadow: 0 1px 1px #777;
+	box-shadow: 0 1px 1px #777;
+	display: inline-block;
+	margin-left: 7px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+
+.player__fbsharebutton iframe, .player__fblikebutton iframe {
+	margin-top: 3px;
+}
+
+/* END Infinity FB Backfill */
 
 /* Transitions */
 
@@ -619,3 +663,4 @@ iframe.player__youtube.hidden {
 .fade.faded {
     opacity: 0;
 }
+

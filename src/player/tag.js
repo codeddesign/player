@@ -1,5 +1,5 @@
 import Ima from './google/ima';
-import parse_link from '../utils/parse_link';
+import { referrer } from '../utils/parse_link';
 import device from '../utils/device';
 
 /**
@@ -30,8 +30,6 @@ class Tag {
     }
 
     _setLink() {
-        const referrer = parse_link(location.href);
-
         const mapped = {
             '[width]': this._player.size().width,
             '[height]': this._player.size().height,

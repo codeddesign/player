@@ -1,5 +1,7 @@
+import config from '../../../config';
 import source from '../../source';
 import random from '../../utils/random';
+import { referrer } from '../../utils/parse_link';
 import $ from '../../utils/element';
 
 /**
@@ -12,8 +14,17 @@ import $ from '../../utils/element';
 export default (campaign) => {
     const unique = `a${random()}`;
     const html = `<div class="player__main hidden" id="${unique}">
-        <div class="player__filler hidden">
-            <img src="${source.path}/css/images/filler.jpg">
+        <div id="player__filler" class="player__filler hidden">
+            <div class="player__fbsharebg">
+                <div class="player__infinityfbwrap">
+                    <div class="player__fblikebutton">
+                        <iframe src="https://www.facebook.com/plugins/like.php?href=${referrer.link.complete}&appId=${config.fb_appId}&width=61&layout=button_count&action=like&size=small&show_faces=false&share=false&height=21" width="86" height="21" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+                    </div>
+                    <div class="player__fbsharebutton">
+                        <iframe src="https://www.facebook.com/plugins/share_button.php?href=${referrer.link.complete}&appId=${config.fb_appId}&layout=button_count&size=small&mobile_iframe=true&width=88&height=20" width="96" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="player__container hidden">
             <div class="player__overlay hidden" ${campaign.isStandard() ? `style="background-image: url(http://img.youtube.com/vi/${campaign.videos().url}/hqdefault.jpg);"` : ''}>
@@ -56,7 +67,7 @@ export default (campaign) => {
                 <span>Add this code to your website</span>
                 <textarea rows="2">${source.script.htmlSelf()}</textarea>
             </div>
-            <span class="player__aclose hidden">&times;</span>
+            <img class="player__aclose hidden" src="${source.path}/css/images/closeicon.png">
             <span class="player__asound icon-mute hidden"></span>
         </div>
     </div>`;

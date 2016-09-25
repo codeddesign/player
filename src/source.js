@@ -1,4 +1,4 @@
-import parse_link from './utils/parse_link';
+import { parse_link } from './utils/parse_link';
 import $ from './utils/element';
 
 /**

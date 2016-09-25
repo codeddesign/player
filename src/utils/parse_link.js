@@ -15,7 +15,7 @@ let path_file_name = (path) => {
 /**
  * Returns information about a link.
  */
-export default (path) => {
+export const parse_link = (path) => {
     const virtual = document.createElement('a');
 
     virtual.href = path;
@@ -34,4 +34,8 @@ export default (path) => {
             file_name
         }
     };
-}
+};
+
+export const referrer = (() => {
+    return parse_link(location.href);
+})();
