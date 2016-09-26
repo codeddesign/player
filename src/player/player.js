@@ -235,11 +235,11 @@ class Player {
             this.$el.addClass('sidebar');
 
             // set fix sizes for main element and player container
-            this.$el.setSizes({ width: 300, height: 250 });
+            this.$el.setSizes({ width: 300, height: 169 });
             this.$els.container.setSizes(sizeFromWidth(300));
 
             // specific margin left for fixed
-            this.$el.style('marginLeft', (this.$el.offsetLeft() - this.$el.parent().offsetLeft()) + 'px');
+            //this.$el.style('marginLeft', (this.$el.offsetLeft() - this.$el.parent().offsetLeft()) + 'px');
 
             // show filler
             this.$els.filler.show().asFaded().fadeIn();

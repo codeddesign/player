@@ -529,10 +529,12 @@ iframe.player__youtube.hidden {
 .player__main.sidebar {
     /*background: black;*/
     background: transparent;
-    min-width: 300px;
+    /*min-width: 300px;*/
     max-width: 300px;
     min-height: 169px;
     max-height: 250px;
+    border: none !important;
+	padding: 0 !important;
 }
 
 .player__main.sidebar.fixed {
