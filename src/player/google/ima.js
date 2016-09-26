@@ -30,10 +30,11 @@ class Ima {
     }
 
     initialize(byUser = false) {
-        this._player.$els.loading.show();
         this._$el.show();
 
         if (!this.initialized && (!device.isMobile() || byUser)) {
+            this._player.$el.pub('initialized');
+
             this.initialized = true;
 
             this.display.initialize();

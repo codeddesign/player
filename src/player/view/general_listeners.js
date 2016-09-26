@@ -81,6 +81,10 @@ export default (player) => {
         }
     })
 
+    player.$el.sub('initialized', () => {
+        player.$els.loading.show();
+    })
+
     player.$el.sub('completed', () => {
         player.$els.loading.hide();
 
