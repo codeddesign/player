@@ -1,5 +1,6 @@
 import $ from './utils/element';
 import source from './source';
+import config from '../config';
 
 /**
  * Inserts assets required by player.
@@ -11,6 +12,10 @@ class Assets {
         this.head = $().find('head');
 
         this._list = [{
+            name: 'sentry',
+            tag: 'script',
+            attributes: { src: 'https://cdn.ravenjs.com/3.7.0/raven.min.js' }
+        }, {
             name: 'youtube',
             tag: 'script',
             attributes: { src: 'https://www.youtube.com/iframe_api' }
@@ -68,6 +73,10 @@ class Assets {
             exists = $().find(selector, false);
 
         if (!exists) {
+            if (asset.name == 'sentry' && !config.sentry) {
+                return this;
+            }
+
             this.head.addChild(asset.tag, asset.attributes, asset.events);
 
             return this;
