@@ -94,7 +94,8 @@ export default (player) => {
     player.$el.sub('aerror', () => {
         player.$els.loading.hide();
 
-        if (!player.hasInfinity() && !device.isMobile()) {
+        // infinity has own logic (continues playing ads)
+        if (!player.campaign.isSidebarInfinity() && !device.isMobile()) {
             player.loadNextTag();
         }
     })

@@ -2,7 +2,7 @@ class Youtube {
     constructor(player, videoId) {
         let self = this;
 
-        this._status = false;
+        this._status = -1;
         this._muted = false;
         this._isFullscreen = false;
 
@@ -35,7 +35,7 @@ class Youtube {
                     }
 
                     self._yt.wasPlayed = () => {
-                        return self._yt.isPlaying() || self._yt.isPaused();
+                        return self._status >= 0;
                     }
 
                     self._yt.play = () => {

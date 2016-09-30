@@ -34,8 +34,6 @@ class Player {
 
         this._disabled = false;
 
-        // todo: disable infinity on desktop
-
         this.__setTemplateElements()
             .__setTemplateListeners()
             .__setView()
@@ -155,12 +153,22 @@ class Player {
         return !this._tags.length;
     }
 
-    hasInfinity() {
-        return this.campaign.isSidebarInfinity();
+    continuousLoad() {
+        if (this.campaign.isSidebarInfinity()) {
+            return true;
+        }
+
+        if (this.campaign.isOnscroll()) {
+            return true;
+        }
+
+        // @todo: add logic for standard
+
+        return false;
     }
 
     resetTags() {
-        if (this.hasInfinity() && this.noTagsLeft() && !this._disabled) {
+        if (this.continuousLoad() && this.noTagsLeft() && !this._disabled) {
             this._tagsRequested = 0;
 
             this.__setTags();
@@ -256,6 +264,7 @@ class Player {
     __setTags() {
         this.mainTag = false;
 
+        // don't load any tags if sidebar infinity and on mobile
         if (this.campaign.isSidebarInfinity() && device.isMobile()) {
             return this;
         }
