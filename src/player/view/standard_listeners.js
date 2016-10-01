@@ -32,7 +32,8 @@ export default (player) => {
         player.$els.play.removeClass('icon-pause');
     }
 
-    let expectsToPlay = false;
+    let expectsToPlay = false,
+        destroyed = false; // ad
 
     /**
      * User - events
@@ -169,6 +170,28 @@ export default (player) => {
         player.$els.progress.attr('max', totalSeconds);
         player.$els.timetotal.html(toMinutesStr(totalSeconds));
         player.$els.timelive.html(toMinutesStr(0));
+
+        // @backup: hide loading
+        player.$els.loading.hide();
+    })
+
+    /**
+     * Youtube starts only if there's no ad loaded
+     * when play it's being triggered (click).
+     *
+     * This event acts like a fallback in case youtube starts
+     * playing and the ad was loading meanwhile.
+     */
+
+    player.$el.sub('a:destroy', () => {
+        if (!destroyed && player.mainTag && player.mainTag.ima.manager) {
+            destroyed = true;
+
+            player.mainTag.ima.manager.destroy();
+
+            // @backup: hide loading
+            player.$els.loading.hide();
+        }
     })
 
     player.$el.sub('yt:timeupdate', () => {
@@ -176,7 +199,9 @@ export default (player) => {
             return false;
         }
 
-        setSeconds(player._youtube.getCurrentTime())
+        setSeconds(player._youtube.getCurrentTime());
+
+        player.$el.pub('a:destroy');
     })
 
     player.$el.sub('yt:jump', (ev) => {
