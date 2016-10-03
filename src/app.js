@@ -8,8 +8,6 @@ import track from './tracker';
 import testAdjust from './utils/test_adjust_data';
 
 assets().add(() => {
-    if (config.sentry) Raven.config(config.sentry).install();
-
     try {
         ajax().campaign(source.id, (data, success, status) => {
             track.app(data.campaign.id, status);
@@ -23,6 +21,9 @@ assets().add(() => {
             new Player(data);
         });
     } catch (e) {
-        if (config.sentry) Raven.captureException(e);
+        if (config.sentry && Raven) {
+            Raven.config(config.sentry).install();
+            Raven.captureException(e);
+        }
     }
 });
