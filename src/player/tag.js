@@ -1,5 +1,5 @@
 import Ima from './google/ima';
-import { referrer } from '../utils/parse_link';
+import { referrer, parse_link } from '../utils/parse_link';
 import device from '../utils/device';
 
 /**
@@ -8,11 +8,14 @@ import device from '../utils/device';
 class Tag {
     constructor(link, player) {
         this.link = link;
+        this.name = link;
+
         this.ima = false;
 
         this._player = player;
 
-        this._setLink();
+        this._setLink()
+            ._setName();
     }
 
     request() {
@@ -52,6 +55,22 @@ class Tag {
             .replace('\]', '\\]');
 
         this.link = this.link.replace(new RegExp(key, 'g'), value);
+
+        return this;
+    }
+
+    _setName() {
+        let data = parse_link(this.link).link.data;
+
+        if (data.iu) {
+            let parts = data.iu.split('/');
+
+            this.name = parts[parts.length - 1];
+
+            return this;
+        }
+
+        this.name = this.link;
 
         return this;
     }

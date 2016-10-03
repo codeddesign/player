@@ -13,6 +13,23 @@ let path_file_name = (path) => {
 }
 
 /**
+ * Transforms link's query to object
+ * in format key: value.
+ */
+let query_to_object = (query) => {
+    const data = {};
+
+    query = query.replace('?', '').split('&');
+
+    query.forEach((pair) => {
+        pair = pair.split('=');
+        data[pair[0]] = pair[1];
+    });
+
+    return data;
+}
+
+/**
  * Returns information about a link.
  */
 export const parse_link = (path) => {
@@ -31,7 +48,8 @@ export const parse_link = (path) => {
             base: base + '/',
             simple,
             complete,
-            file_name
+            file_name,
+            data: query_to_object(virtual.search)
         }
     };
 };

@@ -1,6 +1,7 @@
 import device from '../../utils/device';
 import Animator from '../../utils/animator';
 import config from '../../../config';
+import track from '../../tracker';
 
 class Ima {
     constructor(tag) {
@@ -109,6 +110,9 @@ class Ima {
 
                 // second: notify player
                 this._player.onManagerLoad(this._tag);
+
+                // track
+                track.manager(this._tag.name, 0);
             },
             false
         );
@@ -116,7 +120,8 @@ class Ima {
         this.loader.addEventListener(
             google.ima.AdErrorEvent.Type.AD_ERROR,
             (ev) => {
-                console.warn('Manager', this.error = ev.getError());
+                this.error = ev.getError();
+                track.manager(this._tag.name, this.error.getVastErrorCode(), this.error.getMessage())
 
                 this._player.onManagerLoad();
 
@@ -175,8 +180,8 @@ class Ima {
     }
 
     _aError(ev) {
-        console.warn(this.error = ev.getError());
-        console.info(this._tag.link);
+        this.error = ev.getError();
+        track.ad(this._tag.name, this.error.getVastErrorCode(), this.error.getMessage())
 
         this.destroy();
 
@@ -184,7 +189,7 @@ class Ima {
     }
 
     _aEvent(ev) {
-        console.log(ev.type);
+        track.ad(this._tag.name, 0, ev.type);
 
         switch (ev.type) {
             case google.ima.AdEvent.Type.LOADED:

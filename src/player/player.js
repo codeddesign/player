@@ -305,6 +305,4 @@ class Player {
     }
 }
 
-export default (data) => {
-    return new Player(data);
-};
+export default Player;
