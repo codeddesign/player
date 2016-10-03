@@ -91,7 +91,7 @@ class Tracker {
         data = mergeObjects(data, this.data);
 
         // @todo: based on cookie?
-        if (1 == 2) {
+        if (ENVIRONMENT != 'production') {
             console.log(data)
         }
 
