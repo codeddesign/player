@@ -26,9 +26,9 @@ switch (process.env.build) {
         plugins.pop();
 
         break;
-    case 'test':
+    case 'debug':
         // change player destination name
-        playerName = 'player-test';
+        playerName = 'player-debug';
 
         break;
 }

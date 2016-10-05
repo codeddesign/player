@@ -1,5 +1,5 @@
 <?php
-require_once '_utils.php';
+require_once '../utils.php';
 ?>
 
 <!DOCTYPE html>
@@ -15,6 +15,7 @@ require_once '_utils.php';
                 padding: 10px 0;
             }
         </style>
+
         <?=paragraphs();?>
 
         <div style="background-color: rgb(210, 243, 255);min-height: 10px;">

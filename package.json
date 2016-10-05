@@ -1,8 +1,9 @@
 {
     "scripts": {
         "roll": "rollup -c rollup.config.js --environment build:production",
-        "rollt": "rollup -c rollup.config.js --environment build:test",
-        "rolld": "rollup -c rollup.config.js --environment build:dev -w"
+        "roll-debug": "rollup -c rollup.config.js --environment build:debug",
+        "roll-dev": "rollup -c rollup.config.js --environment build:dev -w",
+        "roll-dev-all": "npm run roll-dev & npm run roll-debug -- -w"
     },
     "devDependencies": {
         "rollup": "^0.34.13",

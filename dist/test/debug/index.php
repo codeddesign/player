@@ -1,10 +1,10 @@
 <?php
-require_once '../_utils.php';
+require_once '../utils.php';
 
-$tags_path = realpath(__DIR__.'/../../../test_tags.php');
+$tags_path = realpath(__DIR__.'/../../../debug_tags.php');
 
 if (!file_exists($tags_path)) {
-    exit('there\'s not test_tags file');
+    exit('there\'s no debug_tags file');
 }
 
 $tags = require_once $tags_path;
@@ -40,11 +40,12 @@ $tag = $tags[$name];
         <script>
             window.__tag = <?=json_encode($tag);?>;
             window.__type = '<?=$campaignType;?>';
+            window.__amc = 1;
         </script>
         <?= ($campaignType != 'standard') ? paragraphs() : paragraphs(1);?>
 
         <div style="background-color: rgb(210, 243, 255);min-height: 10px;">
-            <script src="/t1.js"></script>
+            <script src="/d1.js"></script>
         </div>
 
         <?=paragraphs();?>

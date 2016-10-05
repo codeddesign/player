@@ -1,10 +1,10 @@
 /**
  * Make adjustments to data
- * when build is test
+ * when build is debug
  */
 
 export default (data) => {
-    if (ENVIRONMENT != 'test') {
+    if (ENVIRONMENT != 'debug') {
         return data;
     }
 

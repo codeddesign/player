@@ -1,13 +1,28 @@
 import config from '../config';
 import { referrer } from './utils/parse_link';
+import $ from './utils/element';
 
 /**
- * Ad 3 media visitior session.
+ * Ad 3 media tracker listener.
+ */
+
+let addAMTListener = () => {
+    $().sub('amtl:message', (ev) => {
+        if (ENVIRONMENT == 'dev' || window.__amc) {
+            console.log(ev.detail);
+        }
+    });
+}
+
+/**
+ * Ad 3 media visitor session.
  *
  * Creates unique session id per visit.
  */
 let __session = (() => {
     if (window.__amvs) return window.__amvs;
+
+    addAMTListener();
 
     const range = {
         min: 2,
@@ -66,21 +81,23 @@ class Tracker {
         this._track({
             source: 'app',
             campaign,
-            status
+            status,
+            statusInfo: 'loaded'
         });
     }
 
-    manager(tag, status, statusInfo) {
-        this._tag(tag, 'manager', status, statusInfo);
+    tag(tag, status, statusInfo) {
+        this._ima(tag, 'tag', status, statusInfo);
     }
 
     ad(tag, status, statusInfo) {
-        this._tag(tag, 'ad', status, statusInfo);
+        this._ima(tag, 'ad', status, statusInfo);
     }
 
-    _tag(tag, source, status, statusInfo = '') {
+    _ima(tag, source, status, statusInfo = '') {
         this._track({
-            tag,
+            tag: tag.link,
+            tagName: tag.name,
             source,
             status,
             statusInfo
@@ -90,10 +107,7 @@ class Tracker {
     _track(data) {
         data = mergeObjects(data, this.data);
 
-        // @todo: based on cookie?
-        if (ENVIRONMENT != 'production') {
-            console.log(data)
-        }
+        $().pub('amtl:message', data);
 
         if (config.tracking) {
             const image = new Image;

@@ -112,7 +112,7 @@ class Ima {
                 this._player.onManagerLoad(this._tag);
 
                 // track
-                track.manager(this._tag.name, 0);
+                track.tag(this._tag, 0, 'loaded');
             },
             false
         );
@@ -121,7 +121,7 @@ class Ima {
             google.ima.AdErrorEvent.Type.AD_ERROR,
             (ev) => {
                 this.error = ev.getError();
-                track.manager(this._tag.name, this.error.getVastErrorCode(), this.error.getMessage())
+                track.tag(this._tag, this.error.getVastErrorCode(), this.error.getMessage())
 
                 this._player.onManagerLoad();
 
@@ -181,7 +181,7 @@ class Ima {
 
     _aError(ev) {
         this.error = ev.getError();
-        track.ad(this._tag.name, this.error.getVastErrorCode(), this.error.getMessage())
+        track.ad(this._tag, this.error.getVastErrorCode(), this.error.getMessage())
 
         this.destroy();
 
@@ -189,7 +189,7 @@ class Ima {
     }
 
     _aEvent(ev) {
-        track.ad(this._tag.name, 0, ev.type);
+        track.ad(this._tag, 0, ev.type);
 
         switch (ev.type) {
             case google.ima.AdEvent.Type.LOADED:
