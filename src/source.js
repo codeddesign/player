@@ -16,7 +16,7 @@ class Source {
 
         this.id = matched[0];
 
-        this.path = link.simple.replace(link.file_name, '');
+        this.path = link.base;
 
         this.script = $(script);
     }

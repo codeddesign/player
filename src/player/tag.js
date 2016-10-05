@@ -39,6 +39,7 @@ class Tag {
             '[timestamp]': Date.now(),
             '[referrer_root]': encodeURIComponent(referrer.link.base),
             '[referrer_url]': encodeURIComponent(referrer.link.complete),
+            '[description_url]': encodeURIComponent(referrer.link.complete),
             '[user_agent]': device.agent,
             '[ip_address]': this._player.campaign.data.ip
         };
