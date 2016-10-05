@@ -538,7 +538,7 @@ iframe.player__youtube.hidden {
 }
 
 .player__main.sidebar.fixed {
-    position: fixed;
+    position: fixed !important;
     top: 0;
 }
 
