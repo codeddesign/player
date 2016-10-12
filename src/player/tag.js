@@ -1,6 +1,8 @@
 import Ima from './google/ima';
 import { referrer, parse_link } from '../utils/parse_link';
 import device from '../utils/device';
+import config from '../../config';
+import $ from '../utils/element';
 
 /**
  * Acts like a model for the tags.
@@ -14,12 +16,40 @@ class Tag {
 
         this._player = player;
 
-        this._setLink()
+        this._attempts = 0;
+
+        this._setListeners()
+            ._setLink()
             ._setName();
     }
 
-    request() {
-        this.ima = new Ima(this);
+    request(delayed = false) {
+        // skip if player is disabled
+        if (this._player.isDisabled()) {
+            return this;
+        }
+
+        // direct request if request is not delayed
+        if (!delayed) {
+            this._setIma();
+
+            return this;
+        }
+
+        // skip delayed requests if it's dev and if it goes over maximum allowed
+        if (ENVIRONMENT == 'dev' && this._attempts >= config.ima.request.max) {
+            return this;
+        }
+
+        // delay request
+        setTimeout(() => {
+            // skip if happened before timeout
+            if (this._player.isDisabled()) {
+                return false;
+            }
+
+            this._setIma();
+        }, config.ima.request.delay * 1000);
 
         return this;
     }
@@ -30,6 +60,22 @@ class Tag {
         }
 
         return this.link.toLowerCase().indexOf(find.toLowerCase()) !== -1;
+    }
+
+    _setIma() {
+        this.ima = new Ima(this);
+
+        this._attempts++;
+
+        return this;
+    }
+
+    _setListeners() {
+        $().sub('touchend', () => {
+            this.ima.initialize(true);
+        });
+
+        return this;
     }
 
     _setLink() {

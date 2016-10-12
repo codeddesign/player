@@ -86,12 +86,12 @@ class Tracker {
         });
     }
 
-    tag(tag, status, statusInfo) {
-        this._ima(tag, 'tag', status, statusInfo);
+    tag(_tag, status, statusInfo) {
+        this._ima(_tag, 'tag', status, statusInfo);
     }
 
-    ad(tag, status, statusInfo) {
-        this._ima(tag, 'ad', status, statusInfo);
+    ad(_tag, status, statusInfo) {
+        this._ima(_tag, 'ad', status, statusInfo);
     }
 
     _ima(tag, source, status, statusInfo = '') {

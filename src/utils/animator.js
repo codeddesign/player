@@ -1,3 +1,5 @@
+import config from '../../config';
+
 function AnimatorAudio(video) {
     let audio = new Audio,
         canplay = false,
@@ -53,7 +55,7 @@ function AnimatorAudio(video) {
 }
 
 export default function(ima) {
-    const fps = 30,
+    const fps = config.animator_fps,
         found = ima._$el.find('video', false);
 
     if (!found) {

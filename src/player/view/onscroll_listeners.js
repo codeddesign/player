@@ -1,3 +1,4 @@
+import config from '../../../config';
 import device from '../../utils/device';
 
 export default (player) => {
@@ -6,9 +7,17 @@ export default (player) => {
      */
 
     player.$els.aclose.sub('click', (ev, el) => {
+        // disable player
+        player.disable();
+
+        // stop manager (note: using ima.destroy() won't trigger slideUp)
+        player.mainTag.ima.manager.stop();
+
+        // hide: close icon
         el.hide();
 
-        player.mainTag.ima.manager.stop();
+        // hide: sound icon
+        player.$els.asound.hide();
     })
 
     player.$els.asound.sub('click', (ev, el) => {
@@ -73,20 +82,44 @@ export default (player) => {
     })
 
     player.$els.container.sub('transitionend', () => {
-        player.play();
+        if (player.campaign.isOnscroll()) {
+            player.play();
+        }
     })
 
     player.$el.sub('started', () => {
+        // reset: sound icon
+        player.$els.asound.pub('toggle:sound', { details: { volume: 0 } });
+
+        // reset: close icon
+        player.$els.aclose.hide();
+
+        // delay: showing close icon
         if (!player.mainTag.ima.isSkippable()) {
-            player.$els.aclose.show();
+            setTimeout(() => {
+                player.$els.aclose.show();
+            }, config.delays.aclose * 1000);
         }
 
+        // show sound icon on mobile
         if (device.isMobile()) {
             player.$els.asound.show();
         }
     })
 
     player.$el.sub('completed', () => {
+        player.playing = false;
+
+        // request again
+        player.mainTag.request(true);
+
+        // play next one
+        if (player.hasTagsLeft()) {
+            player.play();
+
+            return false;
+        }
+
         player.$els.container.slideUp();
 
         player.$els.aclose.hide();

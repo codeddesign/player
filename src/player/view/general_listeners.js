@@ -44,20 +44,6 @@ export default (player) => {
      * Events by user.
      */
 
-    $().sub('touchend', () => {
-        if (!player.mainTag) {
-            return false;
-        }
-
-        if (!player.mainTag.ima.initialized) {
-            player.mainTag.ima.initialize(true);
-
-            return false;
-        }
-
-        player.loadNextTag(true);
-    })
-
     $().sub('scroll', () => {
         if (!player.mainTag) {
             return false;
@@ -93,10 +79,5 @@ export default (player) => {
 
     player.$el.sub('aerror', () => {
         player.$els.loading.hide();
-
-        // infinity has own logic (continues playing ads)
-        if (!player.campaign.isSidebarInfinity() && !device.isMobile()) {
-            player.loadNextTag();
-        }
     })
 }

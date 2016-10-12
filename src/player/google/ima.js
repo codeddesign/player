@@ -21,6 +21,7 @@ class Ima {
         this.loaded = false;
         this.started = false;
         this.completed = false;
+        this.destroyed = false;
 
         this.animator = false;
 
@@ -31,9 +32,13 @@ class Ima {
     }
 
     initialize(byUser = false) {
+        if (this._player.isDisabled()) {
+            return this;
+        }
+
         this._$el.show();
 
-        if (!this.initialized && (!device.isMobile() || byUser)) {
+        if (!this.error && !this.initialized && (!device.isMobile() || byUser)) {
             this._player.$el.pub('initialized');
 
             this.initialized = true;
@@ -126,6 +131,9 @@ class Ima {
                 this._player.onManagerLoad();
 
                 this._$el.remove();
+
+                // request tag: with delay
+                this._tag.request(true);
             },
             false
         );
@@ -172,9 +180,15 @@ class Ima {
     }
 
     destroy() {
-        this.manager.destroy();
+        if (!this.destroyed) {
+            this.destroyed = true;
 
-        this._$el.remove();
+            if (this.manager) {
+                this.manager.destroy();
+            }
+
+            this._$el.remove();
+        }
 
         return this;
     }
@@ -195,6 +209,10 @@ class Ima {
             case google.ima.AdEvent.Type.LOADED:
                 this.loaded = true;
 
+                // first: set as main tag
+                this._player.onAdLoad(this._tag);
+
+                // then: trigger loaded
                 this._player.$el.pub('loaded');
 
                 // iphone inline
@@ -218,10 +236,14 @@ class Ima {
 
                 break;
             case google.ima.AdEvent.Type.SKIPPED:
+                this.destroy();
+
                 this._player.$el.pub('skipped');
 
                 break;
             case google.ima.AdEvent.Type.ALL_ADS_COMPLETED:
+                this.destroy();
+
                 this.completed = true;
 
                 this._$el.hide();

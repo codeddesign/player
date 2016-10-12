@@ -34,21 +34,38 @@ class Player {
 
         this._disabled = false;
 
+        this.playing = false;
+
         this.__setTemplateElements()
             .__setTemplateListeners()
             .__setView()
-            .__setTags()
-            .__setYoutube();
+            .__setYoutube()
+            .__requestTags();
     }
 
     play() {
-        if (this.mainTag.ima.loaded && !this.mainTag.ima.error) {
-            this.mainTag.ima.play();
-
+        // interrupt if youtube is playing
+        if (this._youtube && this._youtubeReady && this._youtube.wasPlayed()) {
             return this;
         }
 
-        this.youtubePlay();
+        if (!this.isDisabled() && !this.playing) {
+            this._tags.forEach((tag) => {
+                if (this.mainTag && this.mainTag.ima.destroyed && !tag.ima.destroyed) {
+                    this.mainTag = tag;
+                }
+
+                this.playing = true;
+
+                this.mainTag.ima.play();
+            });
+        }
+
+        if (!this.playing) {
+            this.playing = true;
+
+            this.youtubePlay();
+        }
 
         return this;
     }
@@ -57,6 +74,8 @@ class Player {
         if (!this._youtube) {
             return this;
         }
+
+        this.disable();
 
         this.$els.youtube.show();
 
@@ -71,22 +90,32 @@ class Player {
         this._tagsRequested++;
 
         if (tag) {
-            this._tags.push(tag);
+            tag.ima.initialize();
         }
 
         if (this.tagsReady()) {
-            console.info('All tags requested');
-
-            // first: prioritize tags based on given rules.
-            this._tags = prioritizeTags(this._tags);
-
-            // then: initialize first tag
-            this.loadNextTag();
-
             if (this.campaign.isStandard()) {
                 this.$els.playmain.show();
             }
         }
+    }
+
+    onAdLoad(tag) {
+        this._tags.push(tag);
+
+        this._tags = prioritizeTags(this._tags);
+
+        this._tags.forEach((tag, index) => {
+            // set first tag
+            if (!this.mainTag) {
+                this.mainTag = tag;
+            }
+
+            // hide the rest
+            if (this.mainTag != tag) {
+                tag.ima._$el.hide();
+            }
+        });
     }
 
     onYoutubeReady() {
@@ -113,72 +142,29 @@ class Player {
         return this.campaign.size();
     }
 
-    loadNextTag(byUser = false, forced = false) {
-        // @note: not in view?
-        if (!forced && this.mainTag && !this.mainTag.completed && this.mainTag.ima.initialized && this.mainTag.ima.loaded && !this.mainTag.ima.error) {
+    hasTagsLeft() {
+        if (this.isDisabled()) {
             return false;
         }
 
-        // holds indexes of failed tags
-        const remove = [];
-
-        this._tags.some((tag, index) => {
-            if (tag.ima.error || tag.ima.started || tag.ima.completed) {
-                remove.push(index);
-
-                return false;
+        let has = false;
+        this._tags.forEach((tag) => {
+            if (!tag.ima.destroyed) {
+                has = true;
             }
-
-            // interrupt initialization if youtube is playing
-            if (this._youtube && this._youtubeReady && this._youtube.wasPlayed()) {
-                return true;
-            }
-
-            this.mainTag = tag;
-
-            this.mainTag.ima.initialize(byUser);
-
-            return true;
         });
 
-        // remove failed tags
-        remove.forEach((tagIndex) => {
-            this._tags.splice(tagIndex, 1);
-        });
-
-        this.resetTags();
-    }
-
-    noTagsLeft() {
-        return !this._tags.length;
-    }
-
-    continuousLoad() {
-        if (this.campaign.isSidebarInfinity()) {
-            return true;
-        }
-
-        if (this.campaign.isOnscroll()) {
-            return true;
-        }
-
-        // @todo: add logic for standard
-
-        return false;
-    }
-
-    resetTags() {
-        if (this.continuousLoad() && this.noTagsLeft() && !this._disabled) {
-            this._tagsRequested = 0;
-
-            this.__setTags();
-        }
+        return has;
     }
 
     disable() {
         this._disabled = true;
 
         return this;
+    }
+
+    isDisabled() {
+        return this._disabled;
     }
 
     /**
@@ -261,7 +247,7 @@ class Player {
         return this;
     }
 
-    __setTags() {
+    __requestTags() {
         this.mainTag = false;
 
         // don't load any tags if sidebar infinity and on mobile

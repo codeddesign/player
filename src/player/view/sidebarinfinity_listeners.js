@@ -2,10 +2,28 @@ import $ from '../../utils/element';
 
 export default (player) => {
     /**
-     * Current ad state.
+     * Helpers.
      */
+    let completed = false,
+        shouldPlay = false;
 
-    let completed = false;
+    const filler = {
+        out() {
+            player.$els.filler.fadeOut();
+        },
+        in () {
+            player.$els.filler.fadeIn();
+        }
+    };
+
+    const container = {
+        out() {
+            player.$els.container.fadeOut();
+        },
+        in () {
+            player.$els.container.fadeIn();
+        }
+    }
 
     /**
      * Events by user
@@ -32,7 +50,7 @@ export default (player) => {
     })
 
     /**
-     * Other events.
+     * Player events.
      */
 
     player.$el.sub('disable', () => {
@@ -45,45 +63,63 @@ export default (player) => {
         player.$el.pub('disable');
     })
 
-    player.$els.filler.sub('transitionend', () => {
-        if (completed) {
-            completed = false;
+    player.$el.sub('loaded', () => {
+        if (!player.playing && !shouldPlay) {
+            shouldPlay = true;
 
-            player.loadNextTag(false, true);
-
-            return false;
-        }
-
-        // triggers play
-        if (player.$el.onScreen().mustPlay) {
-            player.$els.container.fadeIn();
+            filler.out();
         }
     })
 
-    player.$el.sub('loaded', () => {
-        if (player.$el.onScreen().mustPlay) {
-            player.$els.filler.fadeOut();
+    player.$el.sub('completed', () => {
+        completed = true;
+
+        player.playing = false;
+
+        if (!player.isDisabled()) {
+            // request again
+            player.mainTag.request(true);
+
+            // play next one
+            if (completed && player.hasTagsLeft()) {
+                player.play();
+
+                return false;
+            }
+        }
+
+        container.out();
+    })
+
+    /**
+     * Other events
+     */
+
+    player.$els.filler.sub('transitionend', () => {
+        if (!player.playing && shouldPlay) {
+            container.in();
+
+            return false;
         }
     })
 
     player.$els.container.sub('transitionend', () => {
-        if (completed) {
-            player.$els.filler.fadeIn();
+        if (!player.playing) {
+            if (shouldPlay) {
+                shouldPlay = false;
+
+                player.play();
+
+                return false;
+            }
+
+            if (completed) {
+                completed = false;
+
+                filler.in();
+
+                return false;
+            }
         }
-    })
-
-    player.$el.sub('completed', (ev) => {
-        completed = true;
-        player.$els.container.fadeOut();
-
-        if (!ev.detail.error) {
-            player.mainTag.ima.destroy();
-        }
-    })
-
-    player.$el.sub('aerror', () => {
-        player.$el.pub('completed', { error: true });
-
-        player.$els.filler.pub('transitionend');
     })
 };

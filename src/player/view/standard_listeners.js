@@ -32,8 +32,7 @@ export default (player) => {
         player.$els.play.removeClass('icon-pause');
     }
 
-    let expectsToPlay = false,
-        destroyed = false; // ad
+    let expectsToPlay = false;
 
     /**
      * User - events
@@ -184,10 +183,8 @@ export default (player) => {
      */
 
     player.$el.sub('a:destroy', () => {
-        if (!destroyed && player.mainTag && player.mainTag.ima.manager) {
-            destroyed = true;
-
-            player.mainTag.ima.manager.destroy();
+        if (player.mainTag) {
+            player.mainTag.ima.destroy();
 
             // @backup: hide loading
             player.$els.loading.hide();
@@ -238,20 +235,28 @@ export default (player) => {
      * Other events.
      */
     player.$el.sub('aerror', () => {
-        if (player.noTagsLeft()) {
+        if (!player.hasTagsLeft()) {
             player.$els.container.addClass('aderror');
 
             player.$els.youtube.show();
         }
 
         if (expectsToPlay) {
+            player.disable();
+
             player.play();
         }
     })
 
     player.$el.sub('canplay', () => {
         if (expectsToPlay) {
+            player.disable();
+
             player.play();
         }
+    })
+
+    player.$el.sub('started', () => {
+        player.disable();
     })
 };
