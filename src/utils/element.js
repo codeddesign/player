@@ -66,7 +66,7 @@ class Element {
     }
 
     html(content = false) {
-        if (!content) {
+        if (content === false) {
             return this.node.innerHTML;
         }
 
@@ -141,11 +141,13 @@ class Element {
     }
 
     attr(name, value = false) {
-        if (!value) {
+        if (value === false) {
             return this.node.getAttribute(name);
         }
 
-        return this.node.setAttribute(name, value);
+        this.node.setAttribute(name, value);
+
+        return this;
     }
 
     replace(content) {
