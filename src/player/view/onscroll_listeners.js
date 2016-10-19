@@ -109,6 +109,9 @@ export default (player) => {
             }, 100);
         }
 
+        // disable player
+        player.disable();
+
         // reset: sound icon
         player.$els.asound.pub('toggle:sound', { detail: { volume: 0 } });
 
