@@ -72,9 +72,17 @@ export default (player) => {
     })
 
     player.$el.sub('completed', () => {
+        player.playing = false;
+
         player.$els.loading.hide();
 
         player.youtubePlay();
+    })
+
+    player.$el.sub('skipped', () => {
+        player.playing = false;
+
+        player.disable();
     })
 
     player.$el.sub('aerror', () => {

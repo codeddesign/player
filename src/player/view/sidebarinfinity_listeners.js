@@ -46,21 +46,15 @@ export default (player) => {
     })
 
     player.$els.aclose.sub('click', () => {
-        player.$el.pub('disable');
+        player.$el.pub('skipped');
     })
 
     /**
      * Player events.
      */
 
-    player.$el.sub('disable', () => {
-        player.disable();
-
-        player.$el.hide();
-    })
-
     player.$el.sub('skipped', () => {
-        player.$el.pub('disable');
+        player.$el.hide();
     })
 
     player.$el.sub('loaded', () => {
@@ -72,9 +66,11 @@ export default (player) => {
     })
 
     player.$el.sub('completed', () => {
-        completed = true;
+        if (!player.campaign.isSidebarInfinity()) {
+            return false;
+        }
 
-        player.playing = false;
+        completed = true;
 
         if (!player.isDisabled()) {
             // request again

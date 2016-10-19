@@ -38,7 +38,12 @@ class Ima {
 
         this._$el.show();
 
-        if (!this.error && !this.initialized && (!device.isMobile() || byUser)) {
+        /**
+         * Must not be already initialized AND
+         * It needs to be non-mobile OR initialized by user OR already initialized once
+         */
+
+        if (!this.initialized && (!device.isMobile() || byUser || this._tag._attempts > 1)) {
             this._player.$el.pub('initialized');
 
             this.initialized = true;
@@ -195,11 +200,12 @@ class Ima {
 
     _aError(ev) {
         this.error = ev.getError();
-        track.ad(this._tag, this.error.getVastErrorCode(), this.error.getMessage())
 
         this.destroy();
 
-        this._player.$el.pub('aerror');
+        this._player.$el.pub('aerror', { tag: this._tag });
+
+        track.ad(this._tag, this.error.getVastErrorCode(), this.error.getMessage());
     }
 
     _aEvent(ev) {

@@ -1,14 +1,24 @@
 import config from '../../../config';
 import device from '../../utils/device';
+import $ from '../../utils/element';
 
 export default (player) => {
+    /**
+     * Helpers.
+     */
+
+    const slideUp = () => {
+        player.$els.container.slideUp();
+
+        player.$els.aclose.hide();
+    }
+
     /**
      * Events by user.
      */
 
     player.$els.aclose.sub('click', (ev, el) => {
-        // disable player
-        player.disable();
+        player.$el.pub('skipped');
 
         // stop manager (note: using ima.destroy() won't trigger slideUp)
         player.mainTag.ima.manager.stop();
@@ -72,12 +82,12 @@ export default (player) => {
      * Other events.
      */
 
-    player.$el.sub('canplay', () => {
-        if (!player.mainTag.ima.started && player.$el.onScreen().mustPlay) {
-            // it will trigger 'transitionend'
-            player.$els.container.slideDown();
+    // @test: black-ad
+    let scrolled = false;
 
-            return false;
+    player.$el.sub('canplay', () => {
+        if (!player.mainTag.ima.started) {
+            $().pub('scroll');
         }
     })
 
@@ -88,8 +98,18 @@ export default (player) => {
     })
 
     player.$el.sub('started', () => {
+        // @test: black-ad
+        if (!scrolled) {
+            scrolled = true;
+
+            window.scrollBy(0, 1);
+            setTimeout(() => {
+                window.scrollBy(0, -1);
+            }, 100);
+        }
+
         // reset: sound icon
-        player.$els.asound.pub('toggle:sound', { details: { volume: 0 } });
+        player.$els.asound.pub('toggle:sound', { detail: { volume: 0 } });
 
         // reset: close icon
         player.$els.aclose.hide();
@@ -108,7 +128,14 @@ export default (player) => {
     })
 
     player.$el.sub('completed', () => {
-        player.playing = false;
+        // @test: black-ad
+        scrolled = false;
+    })
+
+    player.$el.sub('completed', () => {
+        if (!player.campaign.isOnscroll()) {
+            return false;
+        }
 
         // request again
         player.mainTag.request(true);
@@ -120,14 +147,21 @@ export default (player) => {
             return false;
         }
 
-        player.$els.container.slideUp();
-
-        player.$els.aclose.hide();
+        slideUp();
     })
 
-    player.$el.sub('aerror', () => {
-        if (player.mainTag.loaded) {
-            player.$el.pub('completed');
+    player.$el.sub('aerror', (ev) => {
+        const tag = ev.detail.tag;
+
+        // request again
+        tag.request(true);
+
+        if (tag.ima.loaded) {
+            slideUp();
         }
+    })
+
+    player.$el.sub('skipped', (ev) => {
+        slideUp();
     })
 };

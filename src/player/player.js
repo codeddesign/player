@@ -55,15 +55,15 @@ class Player {
                     this.mainTag = tag;
                 }
 
-                this.playing = true;
+                if (this.mainTag && this.mainTag.ima.loaded && !this.mainTag.ima.started) {
+                    this.playing = true;
 
-                this.mainTag.ima.play();
+                    this.mainTag.ima.play();
+                }
             });
         }
 
         if (!this.playing) {
-            this.playing = true;
-
             this.youtubePlay();
         }
 
@@ -74,6 +74,8 @@ class Player {
         if (!this._youtube) {
             return this;
         }
+
+        this.playing = true;
 
         this.disable();
 
