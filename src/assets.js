@@ -37,6 +37,10 @@ class Assets {
             name: 'glyph',
             tag: 'link',
             attributes: { rel: 'stylesheet', href: `${source.path}css/glyphter-font/css/adzicons.css` }
+        }, {
+            name: 'lockerdome',
+            tag: 'script',
+            attributes: {id: 'ld-ajs', src: '//cdn2.lockerdome.com/_js/ajs.js'}
         }];
 
         this.asset = null;

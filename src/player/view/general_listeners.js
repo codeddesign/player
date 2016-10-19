@@ -45,7 +45,9 @@ export default (player) => {
      */
 
     $().sub('scroll', () => {
-        if (!player.mainTag) {
+        if (!player.mainTag || !player.mainTag.ima.loaded) {
+            player.$el.pub('fill-ld');
+
             return false;
         }
 

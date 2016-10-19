@@ -1,6 +1,7 @@
 import config from '../../../config';
 import device from '../../utils/device';
 import $ from '../../utils/element';
+import random from '../../utils/random';
 
 export default (player) => {
     /**
@@ -163,5 +164,29 @@ export default (player) => {
 
     player.$el.sub('skipped', (ev) => {
         slideUp();
+    })
+
+    let filled = false;
+    player.$el.sub('fill-ld', () => {
+        if (filled || !player.campaign.isOnscroll() || !player.$el.onScreen().mustPlay) {
+            return false;
+        }
+
+        filled = true;
+
+        player.disable();
+
+        // generate ad unique element id
+        const id = `ld-${random()}`;
+
+        // filler: empty it, add id
+        player.$els.filler.html('').attr('id', id);
+
+        // push ad
+        window.ldAdInit = window.ldAdInit || [];
+        window.ldAdInit.push({ slot: 8423686407589735, size: [0, 0], id: id });
+
+        // show
+        player.$els.filler.show();
     })
 };

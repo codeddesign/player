@@ -518,7 +518,7 @@ iframe.player__youtube.hidden {
 
 .player__main {
     max-width: 640px;
-    max-height: 379px;
+    /*max-height: 379px;*/
     position: relative;
     margin: 0px auto;
 }
@@ -565,13 +565,17 @@ iframe.player__youtube.hidden {
 /* Player filler */
 
 .player__filler {
-    position: absolute;
+    position: relative;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     text-align: center;
     background: transparent;
+}
+
+.player__filler.sidebar {
+    position: absolute;
 }
 
 /*

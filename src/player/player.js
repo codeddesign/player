@@ -9,6 +9,7 @@ import addSidebarInifinityListeners from './view/sidebarinfinity_listeners';
 import prioritizeTags from '../utils/prioritize_tags';
 import device from '../utils/device';
 import sizeFromWidth from '../utils/size_from_width';
+import random from '../utils/random';
 
 /**
  * Setup and initialization.
@@ -214,11 +215,6 @@ class Player {
             }
         }
 
-        if (this.campaign.isStandard()) {
-            this.$els.logo.show();
-            this.$els.overlay.show();
-        }
-
         if (this.__isSliding()) {
             this.$els.container.asSlided();
         }
@@ -227,8 +223,14 @@ class Player {
             this.$els.container.asFaded();
         }
 
+        if (this.campaign.isStandard()) {
+            this.$els.logo.show();
+            this.$els.overlay.show();
+        }
+
         if (this.campaign.isSidebarInfinity()) {
             this.$el.addClass('sidebar');
+            this.$els.filler.addClass('sidebar');
 
             // set fix sizes for main element and player container
             this.$el.setSizes({ width: 300, height: 169 });
