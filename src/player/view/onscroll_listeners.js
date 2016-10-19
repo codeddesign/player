@@ -148,7 +148,7 @@ export default (player) => {
         player.mainTag.request(true);
 
         // play next one
-        if (player.hasTagsLeft()) {
+        if (player.tagsLeft()) {
             player.play();
 
             return false;
@@ -163,7 +163,7 @@ export default (player) => {
         // request again
         tag.request(true);
 
-        if (tag.ima.loaded && !player.hasTagsLeft()) {
+        if (tag.ima.loaded && !player.tagsLeft()) {
             slideUp();
 
             return false;
@@ -174,7 +174,7 @@ export default (player) => {
 
     player.$el.sub('skipped', (ev) => {
         // @test: play next ad if current one gets skipped
-        if (player.hasTagsLeft()) {
+        if (player.tagsLeft()) {
             player.play();
 
             return false;

@@ -235,7 +235,7 @@ export default (player) => {
      * Other events.
      */
     player.$el.sub('aerror', () => {
-        if (!player.hasTagsLeft()) {
+        if (!player.tagsLeft()) {
             player.$els.container.addClass('aderror');
 
             player.$els.youtube.show();

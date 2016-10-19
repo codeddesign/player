@@ -77,7 +77,7 @@ export default (player) => {
             player.mainTag.request(true);
 
             // play next one
-            if (completed && player.hasTagsLeft()) {
+            if (completed && player.tagsLeft()) {
                 player.play();
 
                 return false;

@@ -146,15 +146,15 @@ class Player {
         return this.campaign.size();
     }
 
-    hasTagsLeft() {
-        let has = false;
+    tagsLeft() {
+        let loaded = 0;
         this._tags.forEach((tag) => {
             if (!tag.ima.destroyed) {
-                has = true;
+                loaded++;
             }
         });
 
-        return has;
+        return loaded;
     }
 
     disable() {
