@@ -224,7 +224,7 @@ class Ima {
 
         switch (ev.type) {
             case google.ima.AdEvent.Type.LOADED:
-                if (this.__skipFlash()) {
+                if (config.ignore_flash && this.__skipFlash()) {
                     this._aErrorCustom(1, 'Sidebar ignores flash');
 
                     return false;
@@ -297,7 +297,8 @@ class Ima {
             contentType = this.manager.getCurrentAd().getContentType();
         }
 
-        if (contentType.indexOf('flash') &&
+        if (
+            contentType.indexOf('flash') !== -1 &&
             this._player.campaign.isSidebarInfinity()
         ) {
             return true;

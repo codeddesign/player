@@ -4,6 +4,7 @@ export default {
     sentry: 'https://123d12345efg12345a1f12aa1234d1234@sentry.io/12345', // to disable sentry set the value to false, without quotes.
     tracking: true,
     animator_fps: 60, // frames per second for iphone inline
+    ignore_flash: false,
     delay: {
         aclose: 3 // seconds before showing ad close icon
     },
