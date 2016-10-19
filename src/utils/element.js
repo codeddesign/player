@@ -224,14 +224,16 @@ class Element {
     }
 
     onScreen() {
-        const bounds = this.bounds(),
-            halfHight = (bounds.height || 360) / 2,
+        const bottomPixels = 10, // extra button pixels required
+            bounds = this.bounds(),
+            fullHeight = bounds.height || 360,
+            halfHeight = fullHeight / 2,
             topAbs = Math.abs(bounds.top),
             diffAbs = window.innerHeight - topAbs,
             inView = bounds.top < window.innerHeight && bounds.bottom > 0,
-            fiftyPercent = diffAbs >= halfHight,
-            mustPause = (bounds.top < 0 && topAbs >= halfHight) || (diffAbs <= halfHight) || false,
-            mustPlay = inView && fiftyPercent && !mustPause;
+            inViewPercentage = diffAbs >= (fullHeight + bottomPixels),
+            mustPause = (bounds.top < 0 && topAbs >= halfHeight) || (diffAbs <= halfHeight) || false,
+            mustPlay = inView && inViewPercentage && !mustPause;
 
         return {
             mustPlay,
