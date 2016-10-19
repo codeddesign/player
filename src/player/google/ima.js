@@ -208,20 +208,24 @@ class Ima {
         track.ad(this._tag, this.error.getVastErrorCode(), this.error.getMessage());
     }
 
+    _aErrorCustom(errorCode, errorMessage) {
+        this._aError({
+            getError: () => {
+                return {
+                    getVastErrorCode: () => errorCode,
+                    getMessage: () => errorMessage
+                }
+            }
+        });
+    }
+
     _aEvent(ev) {
         track.ad(this._tag, 0, ev.type);
 
         switch (ev.type) {
             case google.ima.AdEvent.Type.LOADED:
                 if (this.__skipFlash()) {
-                    this._aError({
-                        getError: () => {
-                            return {
-                                getVastErrorCode: () => 1,
-                                getMessage: () => 'Sidebar ignores flash'
-                            }
-                        }
-                    });
+                    this._aErrorCustom(1, 'Sidebar ignores flash');
 
                     return false;
                 }
