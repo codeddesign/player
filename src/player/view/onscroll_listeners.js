@@ -113,7 +113,9 @@ export default (player) => {
         player.mainTag.ima._$el.show();
 
         // stop requests
-        player.stopRequests();
+        if (player.campaign.isOnscroll()) {
+            player.stopRequests();
+        }
 
         // reset: sound icon
         player.$els.asound.pub('toggle:sound', { detail: { volume: 0 } });
