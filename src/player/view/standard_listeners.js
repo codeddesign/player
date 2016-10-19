@@ -259,4 +259,10 @@ export default (player) => {
     player.$el.sub('started', () => {
         player.disable();
     })
+
+    player.$el.sub('skipped', () => {
+        player.disable();
+
+        player.play();
+    })
 };

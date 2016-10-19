@@ -83,11 +83,11 @@ export default (player) => {
 
     player.$el.sub('skipped', () => {
         player.playing = false;
-
-        player.disable();
     })
 
     player.$el.sub('aerror', () => {
+        player.playing = false;
+
         player.$els.loading.hide();
     })
 }

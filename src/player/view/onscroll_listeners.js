@@ -109,8 +109,11 @@ export default (player) => {
             }, 100);
         }
 
-        // disable player
-        player.disable();
+        // @backup: show ad
+        player.mainTag.ima._$el.show();
+
+        // stop requests
+        player.stopRequests();
 
         // reset: sound icon
         player.$els.asound.pub('toggle:sound', { detail: { volume: 0 } });
@@ -160,18 +163,34 @@ export default (player) => {
         // request again
         tag.request(true);
 
-        if (tag.ima.loaded) {
+        if (tag.ima.loaded && !player.hasTagsLeft()) {
             slideUp();
+
+            return false;
         }
+
+        player.play();
     })
 
     player.$el.sub('skipped', (ev) => {
+        // @test: play next ad if current one gets skipped
+        if (player.hasTagsLeft()) {
+            player.play();
+
+            return false;
+        }
+
         slideUp();
     })
 
     let filled = false;
     player.$el.sub('fill-ld', () => {
-        if (filled || !player.campaign.isOnscroll() || !player.$el.onScreen().mustPlay) {
+        if (
+            filled ||
+            !player.campaign.isOnscroll() ||
+            !player.$el.onScreen().mustPlay ||
+            (player.mainTag && player.mainTag.ima.loaded && !player.mainTag.ima.error)
+        ) {
             return false;
         }
 

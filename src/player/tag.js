@@ -25,7 +25,7 @@ class Tag {
 
     request(delayed = false) {
         // skip if player is disabled
-        if (this._player.isDisabled()) {
+        if (this._player.requestsStopped()) {
             return this;
         }
 
@@ -44,7 +44,7 @@ class Tag {
         // delay request
         setTimeout(() => {
             // skip if happened before timeout
-            if (this._player.isDisabled()) {
+            if (this._player.requestsStopped()) {
                 return false;
             }
 

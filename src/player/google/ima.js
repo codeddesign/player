@@ -32,7 +32,7 @@ class Ima {
     }
 
     initialize(byUser = false) {
-        if (this._player.isDisabled()) {
+        if (this._player.requestsStopped()) {
             return this;
         }
 

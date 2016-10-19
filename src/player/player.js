@@ -34,6 +34,7 @@ class Player {
         this._youtubeReady = false;
 
         this._disabled = false;
+        this._requestsStopped = false;
 
         this.playing = false;
 
@@ -146,10 +147,6 @@ class Player {
     }
 
     hasTagsLeft() {
-        if (this.isDisabled()) {
-            return false;
-        }
-
         let has = false;
         this._tags.forEach((tag) => {
             if (!tag.ima.destroyed) {
@@ -163,11 +160,23 @@ class Player {
     disable() {
         this._disabled = true;
 
+        this.stopRequests();
+
         return this;
     }
 
     isDisabled() {
         return this._disabled;
+    }
+
+    stopRequests() {
+        this._requestsStopped = true;
+
+        return this;
+    }
+
+    requestsStopped() {
+        return this._requestsStopped;
     }
 
     /**

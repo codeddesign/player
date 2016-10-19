@@ -72,7 +72,7 @@ export default (player) => {
 
         completed = true;
 
-        if (!player.isDisabled()) {
+        if (!player.requestsStopped()) {
             // request again
             player.mainTag.request(true);
 
