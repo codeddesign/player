@@ -63,11 +63,20 @@ class Tag {
     }
 
     _setIma() {
-        this.ima = new Ima(this);
+        const interval = setInterval(() => {
+            if (!this._hasBackup()) {
+                clearInterval(interval);
 
-        this._attempts++;
+                this.ima = new Ima(this);
+                this._attempts++;
+            }
+        }, 100);
 
         return this;
+    }
+
+    _hasBackup() {
+        return this._player.tagsLeft() > 1;
     }
 
     _setListeners() {
