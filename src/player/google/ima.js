@@ -213,6 +213,19 @@ class Ima {
 
         switch (ev.type) {
             case google.ima.AdEvent.Type.LOADED:
+                if (this.__skipFlash()) {
+                    this._aError({
+                        getError: () => {
+                            return {
+                                getVastErrorCode: () => 1,
+                                getMessage: () => 'Sidebar ignores flash'
+                            }
+                        }
+                    });
+
+                    return false;
+                }
+
                 this.loaded = true;
 
                 // first: set as main tag
@@ -271,6 +284,22 @@ class Ima {
     __startsMuted() {
         return this._player.campaign.isOnscroll() ||
             this._player.campaign.isSidebarInfinity();
+    }
+
+    __skipFlash() {
+        let contentType = '';
+
+        if (this.manager) {
+            contentType = this.manager.getCurrentAd().getContentType();
+        }
+
+        if (contentType.indexOf('flash') &&
+            this._player.campaign.isSidebarInfinity()
+        ) {
+            return true;
+        }
+
+        return false;
     }
 }
 
