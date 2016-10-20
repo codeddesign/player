@@ -32,11 +32,11 @@ class Assets {
         }, {
             name: 'css',
             tag: 'link',
-            attributes: { rel: 'stylesheet', href: `${source.path}css/style.css` }
+            attributes: { rel: 'stylesheet', href: `http://cdn.a3m.io/css/style.css` }
         }, {
             name: 'glyph',
             tag: 'link',
-            attributes: { rel: 'stylesheet', href: `${source.path}css/glyphter-font/css/adzicons.css` }
+            attributes: { rel: 'stylesheet', href: `http://cdn.a3m.io/css/glyphter-font/css/adzicons.css` }
         }, {
             name: 'lockerdome',
             tag: 'script',

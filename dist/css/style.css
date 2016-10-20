@@ -328,33 +328,33 @@ iframe.player__youtube.hidden {
 }
 
 .player__share .icon-vidshareurl {
-    background: url('images/vid_playershareurl.png');
+    background: url('http://cdn.a3m.io/css/images/vid_playershareurl.png');
     width: 28px;
     height: 28px;
 }
 
 .player__share .icon-vidshareurl:hover {
-    background: url('images/vid_playershareurl.png') 0 -28px;
+    background: url('http://cdn.a3m.io/css/images/vid_playershareurl.png') 0 -28px;
 }
 
 .player__share .icon-vidfacebook {
-    background: url('images/vid_playerfacebookshare.png');
+    background: url('http://cdn.a3m.io/css/images/vid_playerfacebookshare.png');
     width: 28px;
     height: 28px;
 }
 
 .player__share .icon-vidfacebook:hover {
-    background: url('images/vid_playerfacebookshare.png') 0 -28px;
+    background: url('http://cdn.a3m.io/css/images/vid_playerfacebookshare.png') 0 -28px;
 }
 
 .player__share .icon-vidtwitter {
-    background: url('images/vid_playertwittershare.png');
+    background: url('http://cdn.a3m.io/css/images/vid_playertwittershare.png');
     width: 28px;
     height: 28px;
 }
 
 .player__share .icon-vidtwitter:hover {
-    background: url('images/vid_playertwittershare.png') 0 -28px;
+    background: url('http://cdn.a3m.io/css/images/vid_playertwittershare.png') 0 -28px;
 }
 
 .player__logo {
@@ -362,7 +362,7 @@ iframe.player__youtube.hidden {
     left: -50px;
     top: -7px;
     z-index: 9999;
-    background: url('images/ad3logo.png');
+    background: url('http://cdn.a3m.io/css/images/ad3logo.png');
     width: 200px;
     height: 74px;
     -ms-transform: scale(0.2);
@@ -592,7 +592,7 @@ iframe.player__youtube.hidden {
 	display: inline-block;
 	width: 300px;
 	height: 149px;
-	background: url('images/player__fbshare.png');
+	background: url('http://cdn.a3m.io/css/images/player__fbshare.png');
 	position: relative;
 	z-index: 9999;
 }
