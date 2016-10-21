@@ -231,7 +231,7 @@ class Element {
             topAbs = Math.abs(bounds.top),
             diffAbs = window.innerHeight - topAbs,
             inView = bounds.top < window.innerHeight && bounds.bottom > 0,
-            inViewPercentage = diffAbs >= (fullHeight + bottomPixels),
+            inViewPercentage = diffAbs >= (halfHeight + bottomPixels),
             mustPause = (bounds.top < 0 && topAbs >= halfHeight) || (diffAbs <= halfHeight) || false,
             mustPlay = inView && inViewPercentage && !mustPause;
 
