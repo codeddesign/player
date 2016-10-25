@@ -134,11 +134,6 @@ export default (player) => {
         // @backup: show ad
         player.mainTag.ima._$el.show();
 
-        // stop requests
-        if (player.campaign.isOnscroll()) {
-            player.stopRequests();
-        }
-
         // reset: sound icon
         player.$els.asound.pub('toggle:sound', { detail: { volume: 0 } });
 
@@ -194,6 +189,13 @@ export default (player) => {
         }
 
         player.play();
+    })
+
+    player.$el.sub('loaded', (ev) => {
+        // stop requests
+        if (player.campaign.isOnscroll()) {
+            player.stopRequests();
+        }
     })
 
     player.$el.sub('skipped', (ev) => {
