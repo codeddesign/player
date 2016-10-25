@@ -224,8 +224,9 @@ class Ima {
 
         switch (ev.type) {
             case google.ima.AdEvent.Type.LOADED:
-                if (config.ignore_flash && this.__skipFlash()) {
-                    this._aErrorCustom(1, 'Condition met to ignore flash');
+                let met;
+                if (met = this.__ignoreAd()) {
+                    this._aErrorCustom(1, `Condition met to ignore ad [${met}]`);
 
                     return false;
                 }
@@ -290,22 +291,21 @@ class Ima {
             this._player.campaign.isSidebarInfinity();
     }
 
-    __skipFlash() {
-        let contentType = '';
+    __ignoreAd() {
+        let contentType = '',
+            adSystem = '';
 
         if (this.manager) {
             contentType = this.manager.getCurrentAd().getContentType();
+
+            adSystem = this.manager.getCurrentAd().getAdSystem();
         }
 
-        if (contentType.indexOf('flash') === -1) {
-            return false;
-        }
+        const is_lkqd = adSystem.toLowerCase().indexOf('LKQD') !== -1,
+            isBipartisan = window.location.href.indexOf('bipartisan.report') !== -1 || window.location.href.indexOf('bipartisanreport.com') !== -1;
 
-        if (
-            window.location.href.indexOf('bipartisan.report') !== -1 ||
-            window.location.href.indexOf('bipartisanreport.com') !== -1
-        ) {
-            return true;
+        if (is_lkqd && isBipartisan) {
+            return 'LKQD on bipartisan';
         }
 
         return false;
