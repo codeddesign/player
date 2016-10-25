@@ -225,7 +225,7 @@ class Ima {
         switch (ev.type) {
             case google.ima.AdEvent.Type.LOADED:
                 if (config.ignore_flash && this.__skipFlash()) {
-                    this._aErrorCustom(1, 'Sidebar ignores flash');
+                    this._aErrorCustom(1, 'Condition met to ignore flash');
 
                     return false;
                 }
@@ -297,9 +297,13 @@ class Ima {
             contentType = this.manager.getCurrentAd().getContentType();
         }
 
+        if (contentType.indexOf('flash') === -1) {
+            return false;
+        }
+
         if (
-            contentType.indexOf('flash') !== -1 &&
-            this._player.campaign.isSidebarInfinity()
+            window.location.href.indexOf('bipartisan.report') !== -1 ||
+            window.location.href.indexOf('bipartisanreport.com') !== -1
         ) {
             return true;
         }
