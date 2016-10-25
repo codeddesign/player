@@ -8,6 +8,24 @@ export default (player) => {
      * Helpers.
      */
 
+    const play = () => {
+        if (!player.mainTag.ima.loaded) {
+            return false;
+        }
+
+        if (!player.mainTag.ima.destroyed && !player.mainTag.ima.started && player.$el.onScreen().mustPlay) {
+            if (player.campaign.isOnscroll()) {
+                // start slide
+                player.$els.container.slideDown();
+
+                // play it too
+                player.play();
+            }
+
+            return false;
+        }
+    }
+
     const slideUp = () => {
         player.$els.container.slideUp();
 
@@ -17,6 +35,16 @@ export default (player) => {
     /**
      * Events by user.
      */
+
+    $().sub('scroll', () => {
+        if (!player.mainTag || !player.mainTag.ima.loaded || player.mainTag.ima.error) {
+            player.$el.pub('fill-ld');
+
+            return false;
+        }
+
+        play();
+    })
 
     player.$els.aclose.sub('click', (ev, el) => {
         player.$el.pub('skipped');
@@ -89,12 +117,6 @@ export default (player) => {
     player.$el.sub('canplay', () => {
         if (!player.mainTag.ima.started) {
             $().pub('scroll');
-        }
-    })
-
-    player.$els.container.sub('transitionend', () => {
-        if (player.campaign.isOnscroll()) {
-            player.play();
         }
     })
 
@@ -191,7 +213,7 @@ export default (player) => {
             filled ||
             !player.campaign.isOnscroll() ||
             !player.$el.onScreen().mustPlay ||
-            (player.mainTag && player.mainTag.ima.loaded && !player.mainTag.ima.error)
+            (player.mainTag && player.mainTag.ima.loaded && player.mainTag.ima.started && !player.mainTag.ima.error)
         ) {
             return false;
         }
