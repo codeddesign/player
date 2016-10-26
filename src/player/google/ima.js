@@ -301,7 +301,7 @@ class Ima {
             adSystem = this.manager.getCurrentAd().getAdSystem();
         }
 
-        const is_lkqd = adSystem.toLowerCase().indexOf('LKQD') !== -1,
+        const is_lkqd = adSystem.toLowerCase().indexOf('lkqd') !== -1,
             isBipartisan = window.location.href.indexOf('bipartisan.report') !== -1 || window.location.href.indexOf('bipartisanreport.com') !== -1;
 
         if (is_lkqd && isBipartisan) {
