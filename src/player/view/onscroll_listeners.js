@@ -232,7 +232,7 @@ export default (player) => {
 
         // push ad
         window.ldAdInit = window.ldAdInit || [];
-        window.ldAdInit.push({ slot: 8423686407589735, size: [0, 0], id: id });
+        window.ldAdInit.push({ slot: config.lockerdome_slot, size: [0, 0], id: id });
 
         // show
         player.$els.filler.show();
