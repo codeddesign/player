@@ -237,7 +237,8 @@ class Element {
 
         return {
             mustPlay,
-            mustPause
+            mustPause,
+            diffAbs
         };
     }
 

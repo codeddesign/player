@@ -214,9 +214,12 @@ export default (player) => {
         if (
             filled ||
             !player.campaign.isOnscroll() ||
-            !player.$el.onScreen().mustPlay ||
             (player.mainTag && player.mainTag.ima.loaded && player.mainTag.ima.started && !player.mainTag.ima.error)
         ) {
+            return false;
+        }
+
+        if (player.$el.onScreen().diffAbs < config.lockerdome_pixels) {
             return false;
         }
 

@@ -3,6 +3,7 @@ export default {
     fb_appId: 000000000000000,
     sentry: 'https://123d12345efg12345a1f12aa1234d1234@sentry.io/12345', // to disable sentry set the value to false, without quotes.
     lockerdome_slot: 1111111111111111,
+    lockerdome_pixels: -50,
     tracking: true,
     animator_fps: 60, // frames per second for iphone inline
     ignore_flash: false,
