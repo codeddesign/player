@@ -38,9 +38,9 @@ class Assets {
             tag: 'link',
             attributes: { rel: 'stylesheet', href: `http://cdn.a3m.io/css/glyphter-font/css/adzicons.css` }
         }, {
-            name: 'lockerdome',
+            name: 'filler',
             tag: 'script',
-            attributes: {id: 'ld-ajs', src: '//cdn2.lockerdome.com/_js/ajs.js'}
+            attributes: { src: '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js' }
         }];
 
         this.asset = null;

@@ -38,7 +38,7 @@ export default (player) => {
 
     $().sub('scroll', () => {
         if (!player.mainTag || !player.mainTag.ima.loaded || player.mainTag.ima.error) {
-            player.$el.pub('fill-ld');
+            player.$el.pub('filler-backup');
 
             return false;
         }
@@ -210,7 +210,7 @@ export default (player) => {
     })
 
     let filled = false;
-    player.$el.sub('fill-ld', () => {
+    player.$el.sub('filler-backup', () => {
         if (
             filled ||
             !player.campaign.isOnscroll() ||
@@ -219,7 +219,7 @@ export default (player) => {
             return false;
         }
 
-        if (player.$el.onScreen().diffAbs < config.lockerdome_pixels) {
+        if (player.$el.onScreen().diffAbs < config.filler.pixels) {
             return false;
         }
 
@@ -228,14 +228,18 @@ export default (player) => {
         player.disable();
 
         // generate ad unique element id
-        const id = `ld-${random()}`;
+        const id = `filler-${random()}`,
+            html = `
+            <ins class="adsbygoogle" style="display:inline-block;width:336px;height:280px"
+                data-ad-client="${config.filler.client}"
+                data-ad-slot="${config.filler.slot}">
+            </ins>`;
 
-        // filler: empty it, add id
-        player.$els.filler.html('').attr('id', id);
+        // filler: add html / empty it and add id
+        player.$els.filler.html(html).attr('id', id);
 
         // push ad
-        window.ldAdInit = window.ldAdInit || [];
-        window.ldAdInit.push({ slot: config.lockerdome_slot, size: [0, 0], id: id });
+        (adsbygoogle = window.adsbygoogle || []).push({});
 
         // show
         player.$els.filler.show();
