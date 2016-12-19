@@ -223,25 +223,29 @@ export default (player) => {
             return false;
         }
 
-        filled = true;
+        try {
+            filled = true;
 
-        player.disable();
+            player.disable();
 
-        // generate ad unique element id
-        const id = `filler-${random()}`,
-            html = `
+            // generate ad unique element id
+            const id = `filler-${random()}`,
+                html = `
             <ins class="adsbygoogle" style="display:inline-block;width:336px;height:280px"
                 data-ad-client="${config.filler.client}"
                 data-ad-slot="${config.filler.slot}">
             </ins>`;
 
-        // filler: add html / empty it and add id
-        player.$els.filler.html(html).attr('id', id);
+            // filler: add html / empty it and add id
+            player.$els.filler.html(html).attr('id', id);
 
-        // push ad
-        (adsbygoogle = window.adsbygoogle || []).push({});
+            // push ad
+            (adsbygoogle = window.adsbygoogle || []).push({});
 
-        // show
-        player.$els.filler.show();
+            // show
+            player.$els.filler.show();
+        } catch (e) {
+            console.error('filler error', e);
+        }
     })
 };
