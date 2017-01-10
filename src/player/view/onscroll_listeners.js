@@ -38,7 +38,7 @@ export default (player) => {
 
     $().sub('scroll', () => {
         if (!player.mainTag || !player.mainTag.ima.loaded || player.mainTag.ima.error) {
-            player.$el.pub('filler-backup');
+            // player.$el.pub('filler-backup');
 
             return false;
         }
